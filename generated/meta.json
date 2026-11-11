@@ -1,0 +1,22 @@
+{
+  "lists": [
+    {
+      "id": "easylist",
+      "name": "EasyList",
+      "url": "https://easylist.to/easylist/easylist.txt",
+      "version": "202611111006"
+    },
+    {
+      "id": "easyprivacy",
+      "name": "EasyPrivacy",
+      "url": "https://easylist.to/easylist/easyprivacy.txt",
+      "version": "202611111006"
+    },
+    {
+      "id": "antiadblock",
+      "name": "Adblock Warning Removal List",
+      "url": "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
+      "version": "202611111002"
+    }
+  ]
+}

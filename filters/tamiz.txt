@@ -1,0 +1,11 @@
+[Adblock Plus 2.0]
+! Title: Tamiz – arreglos propios
+! Sintaxis de Adblock Plus; se convierte junto al resto de listas con `pnpm update-lists`.
+! Licencia: GPLv3 (como el resto del proyecto).
+!
+! --- Muros anti-bloqueador ---
+!
+! Google Funding Choices ("permite que se te muestren anuncios o suscríbete", p. ej. El País):
+! la Adblock Warning Removal List ya bloquea fundingchoicesmessages.google.com; esto oculta
+! el diálogo si llegara a pintarse desde otra ruta.
+##.fc-ab-root

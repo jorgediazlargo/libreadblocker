@@ -1,0 +1,86 @@
+{
+  "limits": {
+    "maxRules": 30000,
+    "maxRegexRules": 1000
+  },
+  "totalRules": 13124,
+  "totalRegexRules": 11,
+  "droppedByLimit": 0,
+  "droppedByLimitByCategory": {},
+  "lists": [
+    {
+      "id": "easylist",
+      "version": "202611111006",
+      "lines": 77075,
+      "networkFilters": 52024,
+      "cosmeticFilters": 24773,
+      "networkConverted": 49014,
+      "cosmeticConverted": 24432,
+      "skipped": {
+        "pattern:inner-pipe": 3,
+        "type:popup-or-unsupported": 2968,
+        "regex:memoryLimitExceeded": 14,
+        "option:rewrite": 7,
+        "option:csp": 4,
+        "selector:braces": 40,
+        "selector:pseudo-element": 3,
+        "cosmetic:extended": 288,
+        "selector:nested-has": 4,
+        "selector:pseudo:-abp-properties": 6,
+        "cosmetic-switch:not-host": 14
+      },
+      "rules": 3752,
+      "droppedByLimit": 0
+    },
+    {
+      "id": "easyprivacy",
+      "version": "202611111006",
+      "lines": 57380,
+      "networkFilters": 56568,
+      "cosmeticFilters": 37,
+      "networkConverted": 56531,
+      "cosmeticConverted": 2,
+      "skipped": {
+        "pattern:too-broad": 1,
+        "regex:memoryLimitExceeded": 1,
+        "domain:invalid": 2,
+        "option:rewrite": 1,
+        "option:csp": 2,
+        "option:redirect": 29,
+        "selector:syntax": 28,
+        "selector:braces": 2,
+        "selector:pseudo:style": 4,
+        "selector:pseudo:has-text": 1,
+        "option:redirect-rule": 1
+      },
+      "rules": 9197,
+      "droppedByLimit": 0
+    },
+    {
+      "id": "antiadblock",
+      "version": "202611111002",
+      "lines": 3028,
+      "networkFilters": 2530,
+      "cosmeticFilters": 444,
+      "networkConverted": 2530,
+      "cosmeticConverted": 441,
+      "skipped": {
+        "cosmetic:extended": 3
+      },
+      "rules": 175,
+      "droppedByLimit": 0
+    },
+    {
+      "id": "tamiz",
+      "version": null,
+      "lines": 12,
+      "networkFilters": 0,
+      "cosmeticFilters": 1,
+      "networkConverted": 0,
+      "cosmeticConverted": 1,
+      "skipped": {},
+      "rules": 0,
+      "droppedByLimit": 0
+    }
+  ]
+}

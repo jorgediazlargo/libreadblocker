@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Tamiz</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/32.png" width="20" height="20" alt="">
+    <span class="name">Tamiz</span>
+  </header>
+  <main>
+    <div id="host" class="host"></div>
+    <label class="switch">
+      <input type="checkbox" id="toggle" checked>
+      <span class="track"><span class="thumb"></span></span>
+      <span id="status">Bloqueo activo en este sitio</span>
+    </label>
+    <div class="count"><strong id="count">—</strong> peticiones bloqueadas en esta pestaña</div>
+  </main>
+  <footer>
+    Filtros: <span id="lists"></span><br>
+    EasyList, EasyPrivacy y Adblock Warning Removal List © The EasyList authors · GPLv3 / CC BY-SA 3.0
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "tamiz",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bloqueador de anuncios y rastreadores para Chrome (MV3, declarativeNetRequest) basado en EasyList y EasyPrivacy",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "update-lists": "node scripts/update-lists.ts",
+    "test": "node --test 'test/**/*.test.ts'",
+    "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify.ts"
+  },
+  "packageManager": "pnpm@12.18.0",
+  "devDependencies": {
+    "@types/chrome": "^0.3.7",
+    "@types/node": "^26.6.6",
+    "css-what": "^8.0.0",
+    "esbuild": "^0.28.2",
+    "puppeteer-core": "^25.16.0",
+    "typescript": "^7.0.2"
+  }
+}
