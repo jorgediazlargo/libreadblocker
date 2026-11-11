@@ -1,5 +1,5 @@
 {
-  "name": "tamiz",
+  "name": "libreadblocker",
   "version": "0.1.0",
   "private": true,
   "description": "Bloqueador de anuncios y rastreadores para Chrome (MV3, declarativeNetRequest) basado en EasyList y EasyPrivacy",

@@ -1,6 +1,6 @@
 # Atribución
 
-Tamiz incluye reglas derivadas de estas listas de filtros:
+libreadblocker incluye reglas derivadas de estas listas de filtros:
 
 - **EasyList** — https://easylist.to/ — © The EasyList authors
   (https://github.com/easylist/easylist/graphs/contributors)

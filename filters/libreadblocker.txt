@@ -1,5 +1,5 @@
 [Adblock Plus 2.0]
-! Title: Tamiz – arreglos propios
+! Title: libreadblocker – arreglos propios
 ! Sintaxis de Adblock Plus; se convierte junto al resto de listas con `pnpm update-lists`.
 ! Licencia: GPLv3 (como el resto del proyecto).
 !

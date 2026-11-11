@@ -6,7 +6,7 @@ import { ALLOWLIST_KEY, applyAllowlist, isValidHost, setSiteEnabled } from './sh
 
 let queue: Promise<unknown> = Promise.resolve();
 function enqueue(task: () => Promise<void>): Promise<unknown> {
-  queue = queue.then(task).catch((e) => console.error('[tamiz]', e));
+  queue = queue.then(task).catch((e) => console.error('[libreadblocker]', e));
   return queue;
 }
 

@@ -1,4 +1,4 @@
-// Descarga EasyList, EasyPrivacy y la Adblock Warning Removal List, añade los arreglos propios (filters/tamiz.txt)
+// Descarga EasyList, EasyPrivacy y la Adblock Warning Removal List, añade los arreglos propios (filters/libreadblocker.txt)
 // y regenera las reglas en generated/.
 //   pnpm update-lists            descarga y convierte
 //   pnpm update-lists --offline  reutiliza las listas de .cache/lists
@@ -21,7 +21,7 @@ export const LISTS: { id: string; name: string; url?: string; file?: string }[] 
     name: 'Adblock Warning Removal List',
     url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
   },
-  { id: 'tamiz', name: 'Tamiz', file: 'filters/tamiz.txt' },
+  { id: 'libreadblocker', name: 'libreadblocker', file: 'filters/libreadblocker.txt' },
 ];
 
 async function fetchList(url: string): Promise<string> {

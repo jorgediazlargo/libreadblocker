@@ -1,4 +1,4 @@
-# Tamiz
+# libreadblocker
 
 Extensión de Chrome (Manifest V3) que bloquea anuncios y rastreadores con
 [EasyList](https://easylist.to/), EasyPrivacy y la Adblock Warning Removal List, que quita los
@@ -34,7 +34,7 @@ Después, pulsa ↻ en la tarjeta de la extensión en `chrome://extensions`. Las
 
 ## Arreglos propios
 
-`filters/tamiz.txt` es una lista propia con sintaxis de Adblock Plus que se convierte junto con
+`filters/libreadblocker.txt` es una lista propia con sintaxis de Adblock Plus que se convierte junto con
 EasyList y las demás listas. Sirve para casos que esas listas no cubren, como el muro
 anti-bloqueador de Google Funding Choices (El País, por ejemplo). Después de editarla, ejecuta
 `pnpm update-lists --offline && pnpm build`.
