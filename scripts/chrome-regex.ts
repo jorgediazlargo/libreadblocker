@@ -16,7 +16,7 @@ export async function checkRegexesInChrome(regexes: string[]): Promise<Map<strin
   } catch {
     return null;
   }
-  const dir = await mkdtemp(join(tmpdir(), 'libreadblocker-regex-'));
+  const dir = await mkdtemp(join(tmpdir(), 'largo-regex-'));
   const ext = join(dir, 'ext');
   const profile = join(dir, 'profile');
   await mkdir(ext);

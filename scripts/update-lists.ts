@@ -1,13 +1,15 @@
-// Descarga EasyList, EasyPrivacy y la Adblock Warning Removal List, añade los arreglos propios (filters/libreadblocker.txt)
+// Descarga EasyList, EasyPrivacy y la Adblock Warning Removal List, añade las listas propias (filters/*.txt)
 // y regenera las reglas en generated/.
 //   pnpm update-lists            descarga y convierte
 //   pnpm update-lists --offline  reutiliza las listas de .cache/lists
 
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { convertLists, genericCss, LIMITS } from '../src/convert/index.ts';
 import { planBuckets, isMatchableHost, hostPattern } from '../src/convert/buckets.ts';
 import { checkRegexesInChrome } from './chrome-regex.ts';
+import { snapshot, summarize } from './changes.ts';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const CACHE = join(ROOT, '.cache/lists');
@@ -21,13 +23,20 @@ export const LISTS: { id: string; name: string; url?: string; file?: string }[] 
     name: 'Adblock Warning Removal List',
     url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
   },
-  { id: 'libreadblocker', name: 'libreadblocker', file: 'filters/libreadblocker.txt' },
+  { id: 'largo', name: 'Largo', file: 'filters/largo.txt' },
+  // Ruleset aparte para poder apagarlo desde el popup (LINKS_RULESET en src/shared/settings.ts).
+  { id: 'links', name: 'Largo Links', file: 'filters/largo-links.txt' },
 ];
+
+const MAX_LIST_BYTES = 20 * 1024 * 1024;
 
 async function fetchList(url: string): Promise<string> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  // Una redirección no puede sacarnos de HTTPS.
+  if (!res.url.startsWith('https://')) throw new Error(`${url}: redirige a ${res.url}`);
   const text = await res.text();
+  if (text.length > MAX_LIST_BYTES) throw new Error(`${url}: ${text.length} bytes, demasiado grande`);
   if (!text.startsWith('[Adblock Plus')) throw new Error(`${url}: no parece una lista de filtros`);
   return text;
 }
@@ -35,7 +44,7 @@ async function fetchList(url: string): Promise<string> {
 const offline = process.argv.includes('--offline');
 await mkdir(CACHE, { recursive: true });
 
-const inputs = [];
+const inputs: { id: string; text: string }[] = [];
 for (const list of LISTS) {
   const file = join(CACHE, `${list.id}.txt`);
   let text: string;
@@ -65,6 +74,8 @@ if (verdicts) {
 }
 const out = convertLists(inputs, { rejectRegex: (re) => verdicts?.get(re) ?? null });
 
+const before = await snapshot(OUT);
+
 await rm(OUT, { recursive: true, force: true });
 await mkdir(join(OUT, 'rules'), { recursive: true });
 for (const rs of out.rulesets) {
@@ -87,7 +98,14 @@ await writeFile(
 await writeFile(
   join(OUT, 'meta.json'),
   JSON.stringify(
-    { lists: LISTS.filter((l) => l.url).map((l) => ({ ...l, version: out.report.lists[LISTS.indexOf(l)]!.version })) },
+    {
+      lists: LISTS.filter((l) => l.url).map((l) => ({
+        ...l,
+        version: out.report.lists[LISTS.indexOf(l)]!.version,
+        // Huella de la lista exacta que se convirtió, para poder reproducir y auditar la build.
+        sha256: createHash('sha256').update(inputs[LISTS.indexOf(l)]!.text).digest('hex'),
+      })),
+    },
     null,
     2,
   ) + '\n',
@@ -119,3 +137,7 @@ console.log(
 console.log(
   `Cosmética: ${out.cosmetic.generic.length} selectores genéricos, ${Object.keys(out.cosmetic.specific.h).length} sitios con selectores propios en ${plan.buckets.length} grupos, ${out.cosmetic.specific.g.length} genéricos con excepciones`,
 );
+
+const after = await snapshot(OUT);
+const rejected = Object.fromEntries(r.lists.map((l) => [l.id, l.tooBroad]));
+if (before && after) console.log(summarize(before, after, rejected).join('\n'));

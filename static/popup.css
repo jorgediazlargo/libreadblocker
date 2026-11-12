@@ -63,4 +63,6 @@ footer {
   color: var(--muted);
   font-size: 11px;
 }
-body.na .switch, body.na .count { display: none; }
+.modules { padding: 12px 14px; display: grid; gap: 10px; border-top: 1px solid var(--line); }
+.modules .track { background: var(--muted); }
+body.na main .switch, body.na .count { display: none; }

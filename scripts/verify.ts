@@ -34,7 +34,7 @@ const ALLOWLIST_SITE = SITES[0]!;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function launch(withExtension: boolean) {
-  const userDataDir = await mkdtemp(join(tmpdir(), 'libreadblocker-verify-'));
+  const userDataDir = await mkdtemp(join(tmpdir(), 'largo-verify-'));
   const browser = await puppeteer.launch({
     executablePath: CHROME,
     headless: true,
@@ -134,7 +134,7 @@ async function genericHidingWorks(page: Page, className: string): Promise<boolea
   return page.evaluate((cls) => {
     const el = document.createElement('div');
     el.className = cls;
-    el.textContent = 'libreadblocker-test';
+    el.textContent = 'largo-test';
     document.body.appendChild(el);
     const hidden = getComputedStyle(el).display === 'none';
     el.remove();
@@ -221,7 +221,7 @@ await base.browser.close();
 await rm(base.userDataDir, { recursive: true, force: true });
 
 // 2) Con extensión
-console.log('== Con libreadblocker');
+console.log('== Con Largo Ad Blocker');
 const ext = await launch(true);
 const extId = await ext.browser.installExtension(DIST);
 const sw = await extensionWorker(ext.browser, extId);

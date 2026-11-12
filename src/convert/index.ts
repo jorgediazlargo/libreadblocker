@@ -50,6 +50,8 @@ export interface ListReport {
   skipped: Record<string, number>;
   rules: number;
   droppedByLimit: number;
+  /** Filtros descartados porque ocultarían la página entera: señal de lista comprometida. */
+  tooBroad: string[];
 }
 
 export interface ConversionOutput {
@@ -96,13 +98,22 @@ export function pruneSubdomains(domains: Iterable<string>): string[] {
   return out.sort();
 }
 
-/** Agrupa reglas `||dominio^` con las mismas opciones en una sola regla con requestDomains. */
+/**
+ * Agrupa reglas `||dominio^` con las mismas opciones en una sola regla con requestDomains,
+ * y los `$removeparam` con la misma condición en una sola redirección.
+ */
 export function aggregateRules(rules: PendingRule[]): PendingRule[] {
   const groups = new Map<string, { base: PendingRule; domains: string[] }>();
   const others = new Map<string, PendingRule>();
+  const params = new Map<string, { rule: PendingRule; names: Set<string> }>();
   for (const rule of rules) {
     const { requestDomains, ...rest } = rule.condition;
-    if (requestDomains && !rest.urlFilter && !rest.regexFilter) {
+    if (rule.action.type === 'redirect') {
+      const key = JSON.stringify(rule.condition);
+      let p = params.get(key);
+      if (!p) params.set(key, (p = { rule, names: new Set() }));
+      for (const name of rule.action.redirect.transform.queryTransform.removeParams) p.names.add(name);
+    } else if (requestDomains && !rest.urlFilter && !rest.regexFilter) {
       const key = JSON.stringify({ ...rule, condition: rest });
       const g = groups.get(key);
       if (g) g.domains.push(...requestDomains);
@@ -116,6 +127,18 @@ export function aggregateRules(rules: PendingRule[]): PendingRule[] {
     out.push({ ...base, condition: { requestDomains: pruneSubdomains(domains), ...base.condition } });
   }
   out.push(...others.values());
+  for (const { rule, names } of params.values()) {
+    const removeParams = [...names].sort();
+    const action: PendingRule['action'] = { type: 'redirect', redirect: { transform: { queryTransform: { removeParams } } } };
+    const c = rule.condition;
+    if (c.urlFilter || c.regexFilter) {
+      out.push({ ...rule, action });
+      continue;
+    }
+    // Sin patrón de URL: una regla por parámetro que solo salta si la URL lo lleva (`^` es un
+    // separador: `?` o `&`), y que quita todos de una vez para no encadenar redirecciones.
+    for (const name of removeParams) out.push({ ...rule, action, condition: { urlFilter: `^${name}=`, ...c } });
+  }
   return out;
 }
 
@@ -159,6 +182,7 @@ export function convertLists(lists: InputList[], options: ConvertOptions = {}): 
       skipped: {},
       rules: 0,
       droppedByLimit: 0,
+      tooBroad: [],
     };
     const skip = (reason: string) => (report.skipped[reason] = (report.skipped[reason] ?? 0) + 1);
     const rules: PendingRule[] = [];
@@ -173,6 +197,7 @@ export function convertLists(lists: InputList[], options: ConvertOptions = {}): 
         const r = parseCosmeticFilter(line);
         if (r.kind === 'skip') {
           skip(r.reason);
+          if (r.reason === 'selector:page-root' || r.reason === 'selector:too-broad') report.tooBroad.push(r.filter);
           continue;
         }
         report.cosmeticConverted++;

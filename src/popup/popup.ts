@@ -1,13 +1,11 @@
 import { getAllowlist, matchingEntry, isValidHost } from '../shared/allowlist.ts';
+import { getModules, type ModuleName } from '../shared/settings.ts';
 import meta from '../../generated/meta.json' with { type: 'json' };
 import allowIdsJson from '../../generated/allow-ids.json' with { type: 'json' };
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 async function currentTab(): Promise<chrome.tabs.Tab | undefined> {
-  // ?tab=<id> permite abrir el popup como página en las pruebas automáticas.
-  const forced = new URLSearchParams(location.search).get('tab');
-  if (forced) return chrome.tabs.get(Number(forced));
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab;
 }
@@ -35,9 +33,25 @@ function render(host: string, enabled: boolean) {
   $('host').textContent = host;
 }
 
+/** Interruptores de los módulos: valen para todos los sitios y se aplican en la siguiente carga. */
+async function modules() {
+  const state = await getModules();
+  for (const input of document.querySelectorAll<HTMLInputElement>('input[data-module]')) {
+    const module = input.dataset.module as ModuleName;
+    input.checked = state[module];
+    input.addEventListener('change', async () => {
+      input.disabled = true;
+      await chrome.runtime.sendMessage({ type: 'set-module', module, enabled: input.checked });
+      input.checked = (await getModules())[module];
+      input.disabled = false;
+    });
+  }
+}
+
 async function main() {
   const versions = meta.lists.map((l) => `${l.name} ${l.version ?? ''}`.trim()).join(' · ');
   $('lists').textContent = versions;
+  void modules();
 
   const tab = await currentTab();
   const url = tab?.url ? new URL(tab.url) : null;

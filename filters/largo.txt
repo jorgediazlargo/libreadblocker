@@ -1,5 +1,5 @@
 [Adblock Plus 2.0]
-! Title: libreadblocker – arreglos propios
+! Title: Largo Ad Blocker – arreglos propios
 ! Sintaxis de Adblock Plus; se convierte junto al resto de listas con `pnpm update-lists`.
 ! Licencia: GPLv3 (como el resto del proyecto).
 !

@@ -1,0 +1,111 @@
+[Adblock Plus 2.0]
+! Title: Largo Links – parámetros de rastreo
+! Quita de la URL los parámetros que solo sirven para rastrear campañas y clics.
+! Sintaxis: `$removeparam=nombre` (nombre exacto; DNR no admite regex ni comodines).
+! Sin tipo de recurso, se aplica solo a la navegación principal.
+! No incluye identificadores de afiliación (irclickid, tag…): quitarlos rompe cashback y comisiones.
+! Licencia: GPLv3 (como el resto del proyecto).
+!
+! --- Google Analytics / Ads ---
+$removeparam=utm_source
+$removeparam=utm_medium
+$removeparam=utm_campaign
+$removeparam=utm_term
+$removeparam=utm_content
+$removeparam=utm_id
+$removeparam=utm_name
+$removeparam=utm_cid
+$removeparam=utm_reader
+$removeparam=utm_referrer
+$removeparam=utm_social
+$removeparam=utm_social-type
+$removeparam=utm_brand
+$removeparam=utm_pubreferrer
+$removeparam=utm_swu
+$removeparam=utm_viz_id
+$removeparam=utm_source_platform
+$removeparam=utm_creative_format
+$removeparam=utm_marketing_tactic
+$removeparam=gclid
+$removeparam=gclsrc
+$removeparam=dclid
+$removeparam=gbraid
+$removeparam=wbraid
+$removeparam=gad_source
+$removeparam=gad_campaignid
+$removeparam=srsltid
+$removeparam=_ga
+$removeparam=_gl
+!
+! --- Redes sociales ---
+$removeparam=fbclid
+$removeparam=igshid
+$removeparam=igsh
+$removeparam=mibextid
+$removeparam=twclid
+$removeparam=ttclid
+$removeparam=li_fat_id
+$removeparam=epik
+$removeparam=msclkid
+!
+! --- Yandex ---
+$removeparam=yclid
+$removeparam=ysclid
+$removeparam=_openstat
+!
+! --- Email marketing y CRM ---
+$removeparam=mc_cid
+$removeparam=mc_eid
+$removeparam=mkt_tok
+$removeparam=_hsenc
+$removeparam=_hsmi
+$removeparam=__hssc
+$removeparam=__hstc
+$removeparam=__hsfp
+$removeparam=hsCtaTracking
+$removeparam=_kx
+$removeparam=dm_i
+$removeparam=ml_subscriber
+$removeparam=ml_subscriber_hash
+$removeparam=vero_id
+$removeparam=vero_conv
+$removeparam=oly_anon_id
+$removeparam=oly_enc_id
+$removeparam=_bta_tid
+$removeparam=_bta_c
+$removeparam=trk_contact
+$removeparam=trk_msg
+$removeparam=trk_module
+$removeparam=trk_sid
+$removeparam=wickedid
+!
+! --- Matomo / Piwik / AT Internet / Adobe ---
+$removeparam=mtm_source
+$removeparam=mtm_medium
+$removeparam=mtm_campaign
+$removeparam=mtm_keyword
+$removeparam=mtm_content
+$removeparam=mtm_cid
+$removeparam=mtm_group
+$removeparam=mtm_placement
+$removeparam=pk_source
+$removeparam=pk_medium
+$removeparam=pk_campaign
+$removeparam=pk_kwd
+$removeparam=pk_content
+$removeparam=pk_cid
+$removeparam=at_medium
+$removeparam=at_campaign
+$removeparam=xtor
+$removeparam=s_kwcid
+$removeparam=ef_id
+!
+! --- Por sitio ---
+! Identificador de quién compartió el enlace.
+||youtube.com^$removeparam=si
+||youtu.be^$removeparam=si
+||open.spotify.com^$removeparam=si
+||x.com/*/status/$removeparam=s
+||x.com/*/status/$removeparam=t
+||twitter.com/*/status/$removeparam=s
+||twitter.com/*/status/$removeparam=t

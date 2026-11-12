@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Largo Ad Blocker — Ele larga</title>
+  <defs><clipPath id="t"><rect width="512" height="512" rx="116"/></clipPath></defs>
+  <rect width="512" height="512" rx="116" fill="#111111"/>
+  <path d="M116 112H200V316H512V400H116Z" fill="#FFD400" clip-path="url(#t)"/>
+</svg>

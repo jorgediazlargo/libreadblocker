@@ -149,3 +149,29 @@ test('patrones especiales', () => {
   assert.deepEqual(rule('||bücher.de^').condition, { requestDomains: ['xn--bcher-kva.de'] });
   assert.deepEqual(rule('||t.com^$method=post|get').condition.requestMethods, ['post', 'get']);
 });
+
+test('$removeparam se convierte en redirect con queryTransform', () => {
+  assert.deepEqual(rule('$removeparam=utm_source'), {
+    priority: 1,
+    action: { type: 'redirect', redirect: { transform: { queryTransform: { removeParams: ['utm_source'] } } } },
+    condition: { resourceTypes: ['main_frame'] },
+  });
+  assert.deepEqual(rule('||youtube.com^$removeparam=si').condition, {
+    requestDomains: ['youtube.com'],
+    resourceTypes: ['main_frame'],
+  });
+  assert.deepEqual(rule('||x.com/*/status/$removeparam=s,subdocument,document').condition, {
+    urlFilter: '||x.com/*/status/',
+    resourceTypes: ['main_frame', 'sub_frame'],
+  });
+  // El nombre conserva mayúsculas: removeParams compara de forma exacta.
+  const a = rule('$removeparam=hsCtaTracking').action;
+  assert.deepEqual(a.type === 'redirect' && a.redirect.transform.queryTransform.removeParams, ['hsCtaTracking']);
+});
+
+test('$removeparam que DNR no puede expresar se descarta', () => {
+  assert.equal(skipped('$removeparam'), 'removeparam:all');
+  assert.equal(skipped('$removeparam=/^utm_/'), 'removeparam:not-literal');
+  assert.equal(skipped('$removeparam=~keep'), 'removeparam:not-literal');
+  assert.equal(skipped('@@||example.com^$removeparam=utm_source'), 'removeparam:exception');
+});

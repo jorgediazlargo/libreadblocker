@@ -1,5 +1,5 @@
 {
-  "name": "libreadblocker",
+  "name": "largo-ad-blocker",
   "version": "0.1.0",
   "private": true,
   "description": "Bloqueador de anuncios y rastreadores para Chrome (MV3, declarativeNetRequest) basado en EasyList y EasyPrivacy",
@@ -14,6 +14,7 @@
   },
   "packageManager": "pnpm@12.18.0",
   "devDependencies": {
+    "@duckduckgo/autoconsent": "16.63.0",
     "@types/chrome": "^0.3.7",
     "@types/node": "^26.6.6",
     "css-what": "^8.0.0",

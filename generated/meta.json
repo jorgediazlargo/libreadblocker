@@ -4,19 +4,22 @@
       "id": "easylist",
       "name": "EasyList",
       "url": "https://easylist.to/easylist/easylist.txt",
-      "version": "202611111006"
+      "version": "202611111006",
+      "sha256": "fc3b9b0bf8e3afa0058620e1f2ac4267cedaa1cc9867713f73551b312ffe9013"
     },
     {
       "id": "easyprivacy",
       "name": "EasyPrivacy",
       "url": "https://easylist.to/easylist/easyprivacy.txt",
-      "version": "202611111006"
+      "version": "202611111006",
+      "sha256": "d7d58851f41c91967a44e65b9711ea6c86b1df5a42be9d70edfc6f8ac5533a9b"
     },
     {
       "id": "antiadblock",
       "name": "Adblock Warning Removal List",
       "url": "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
-      "version": "202611111002"
+      "version": "202611111002",
+      "sha256": "fb44ae85acba05477e0aebdcaa062fce39a970c9b76b00cfb03de40d6f218d65"
     }
   ]
 }

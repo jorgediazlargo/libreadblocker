@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer-core';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-const dir = await mkdtemp(join(tmpdir(), 'libreadblocker-ep-'));
+const dir = await mkdtemp(join(tmpdir(), 'largo-ep-'));
 const browser = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true, pipe: true, enableExtensions: true, userDataDir: dir, args: ['--lang=es-ES'] });
 await browser.installExtension(join(process.cwd(), 'dist'));
 await new Promise((r) => setTimeout(r, 1500));

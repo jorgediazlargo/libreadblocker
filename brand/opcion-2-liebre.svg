@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>libreadblocker — Liebre</title>
+  <rect width="512" height="512" rx="116" fill="#5B2BFF"/>
+  <g transform="translate(-14 0)">
+    <g fill="none" stroke="#FFF7EA" stroke-width="68" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M206 290L182 112"/>
+      <path d="M306 290L326 168L384 132"/>
+    </g>
+    <ellipse cx="256" cy="336" rx="128" ry="104" fill="#FFF7EA"/>
+    <circle cx="206" cy="326" r="16" fill="#1B0B5E"/>
+    <circle cx="306" cy="326" r="16" fill="#1B0B5E"/>
+    <path d="M240 368H272L256 386Z" fill="#FF5C9A" stroke="#FF5C9A" stroke-width="10" stroke-linejoin="round"/>
+  </g>
+</svg>

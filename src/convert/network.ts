@@ -37,10 +37,14 @@ export interface DnrCondition {
   requestMethods?: string[];
 }
 
+export type DnrAction =
+  | { type: 'block' | 'allow' | 'allowAllRequests' }
+  | { type: 'redirect'; redirect: { transform: { queryTransform: { removeParams: string[] } } } };
+
 export interface DnrRule {
   id: number;
   priority: number;
-  action: { type: 'block' | 'allow' | 'allowAllRequests' };
+  action: DnrAction;
   condition: DnrCondition;
 }
 
@@ -86,7 +90,6 @@ const UNSUPPORTED_OPTIONS = new Set([
   'csp',
   'header',
   'sitekey',
-  'removeparam',
   'genericblock',
   'replace',
   'permissions',
@@ -99,6 +102,9 @@ const UNSUPPORTED_OPTIONS = new Set([
 const UNSUPPORTED_TYPES = new Set(['popup', 'webrtc', 'popunder']);
 
 const HOST_RE = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*$/;
+
+/** Nombre literal de parámetro: sin regex (/…/), negación (~) ni caracteres con significado en urlFilter. */
+const PARAM_RE = /^[A-Za-z0-9_.\-[\]]+$/;
 
 export function normalizeDomain(raw: string): string | null {
   const d = raw.trim().toLowerCase().replace(/\.$/, '');
@@ -156,6 +162,7 @@ export function parseNetworkFilter(line: string): NetworkResult {
   const initiatorDomains: string[] = [];
   const excludedInitiatorDomains: string[] = [];
   let methods: string[] | undefined;
+  let removeParam: string | undefined;
 
   for (const rawOpt of options) {
     const opt = rawOpt.trim();
@@ -218,6 +225,13 @@ export function parseNetworkFilter(line: string): NetworkResult {
         if (methods.length === 0) return skip('option:method-negated');
         continue;
       }
+      case 'removeparam':
+        // DNR solo quita parámetros por nombre exacto (queryTransform.removeParams).
+        if (exception || negated) return skip('removeparam:exception');
+        if (!value) return skip('removeparam:all');
+        if (!PARAM_RE.test(value)) return skip('removeparam:not-literal');
+        removeParam = value;
+        continue;
       case 'all':
         for (const t of [...Object.values(TYPE_MAP).flat(), 'sub_frame' as const]) include.add(t);
         sawSupportedType = true;
@@ -282,7 +296,14 @@ export function parseNetworkFilter(line: string): NetworkResult {
   }
   if (matchCase) condition.isUrlFilterCaseSensitive = true;
 
-  if (!condition.urlFilter && !condition.regexFilter && !condition.requestDomains && initiatorDomains.length === 0) {
+  // Un $removeparam sin patrón es válido: al agrupar se le pone `^parametro=` como filtro.
+  if (
+    !removeParam &&
+    !condition.urlFilter &&
+    !condition.regexFilter &&
+    !condition.requestDomains &&
+    initiatorDomains.length === 0
+  ) {
     return skip('pattern:too-broad');
   }
 
@@ -291,7 +312,22 @@ export function parseNetworkFilter(line: string): NetworkResult {
   if (thirdParty !== undefined) condition.domainType = thirdParty ? 'thirdParty' : 'firstParty';
   if (methods) condition.requestMethods = methods;
 
-  let actionType: DnrRule['action']['type'];
+  if (removeParam) {
+    for (const t of exclude) include.delete(t);
+    // Por defecto solo la navegación principal, que es la URL que el usuario ve y comparte.
+    condition.resourceTypes = include.size ? [...include].sort() : ['main_frame'];
+    return {
+      kind: 'rule',
+      rule: {
+        priority: PRIORITY_DEFAULT,
+        action: { type: 'redirect', redirect: { transform: { queryTransform: { removeParams: [removeParam] } } } },
+        condition,
+      },
+      filter,
+    };
+  }
+
+  let actionType: 'block' | 'allow' | 'allowAllRequests';
   if (exception && documentOpt) {
     actionType = 'allowAllRequests';
     condition.resourceTypes = ['main_frame', 'sub_frame'];

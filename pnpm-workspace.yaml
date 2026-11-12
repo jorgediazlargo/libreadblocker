@@ -1,2 +1,11 @@
 allowBuilds:
   esbuild: true
+# No instalar versiones publicadas hace menos de 7 días (minutos): la mayoría de paquetes
+# maliciosos se retiran del registro antes.
+minimumReleaseAge: 10080
+# El lockfile traía estas dos (transitivas de puppeteer-core, solo desarrollo) publicadas el
+# 2026-11-08, dentro del margen de 7 días. Se fijan a la versión anterior; quitar este bloque
+# a partir del 2026-11-16 y ejecutar `pnpm install`.
+overrides:
+  ws: 8.22.1
+  ansi-regex: 6.5.0
