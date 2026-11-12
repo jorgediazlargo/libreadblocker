@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>libreadblocker</title>
+  <title>Largo Ad Blocker</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <header>
     <img src="icons/32.png" width="20" height="20" alt="">
-    <span class="name">libreadblocker</span>
+    <span class="name">Largo Ad Blocker</span>
   </header>
   <main>
     <div id="host" class="host"></div>
@@ -19,9 +19,22 @@
     </label>
     <div class="count"><strong id="count">—</strong> peticiones bloqueadas en esta pestaña</div>
   </main>
+  <section class="modules">
+    <label class="switch">
+      <input type="checkbox" id="links" data-module="links">
+      <span class="track"><span class="thumb"></span></span>
+      <span>Quitar el rastreo de los enlaces</span>
+    </label>
+    <label class="switch">
+      <input type="checkbox" id="cookies" data-module="cookies">
+      <span class="track"><span class="thumb"></span></span>
+      <span>Rechazar los avisos de cookies</span>
+    </label>
+  </section>
   <footer>
     Filtros: <span id="lists"></span><br>
     EasyList, EasyPrivacy y Adblock Warning Removal List © The EasyList authors · GPLv3 / CC BY-SA 3.0
+    <br>Autoconsent © Duck Duck Go, Inc. · MPL 2.0
   </footer>
   <script src="popup.js"></script>
 </body>

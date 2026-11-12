@@ -3,7 +3,7 @@
     "maxRules": 30000,
     "maxRegexRules": 1000
   },
-  "totalRules": 13124,
+  "totalRules": 13213,
   "totalRegexRules": 11,
   "droppedByLimit": 0,
   "droppedByLimitByCategory": {},
@@ -15,7 +15,7 @@
       "networkFilters": 52024,
       "cosmeticFilters": 24773,
       "networkConverted": 49014,
-      "cosmeticConverted": 24432,
+      "cosmeticConverted": 24431,
       "skipped": {
         "pattern:inner-pipe": 3,
         "type:popup-or-unsupported": 2968,
@@ -26,11 +26,15 @@
         "selector:pseudo-element": 3,
         "cosmetic:extended": 288,
         "selector:nested-has": 4,
+        "selector:page-root": 1,
         "selector:pseudo:-abp-properties": 6,
         "cosmetic-switch:not-host": 14
       },
       "rules": 3752,
-      "droppedByLimit": 0
+      "droppedByLimit": 0,
+      "tooBroad": [
+        "aads.com,ad-maven.com,adcash.com,admitad.com,adskeeper.com,adspyglass.com,adsupply.com,chpadblock.com,exoclick.com,hilltopads.com,juicyads.com,monetag.com,popads.net,propellerads.com,purpleads.io,trafficshop.com,yavli.com##HTML"
+      ]
     },
     {
       "id": "easyprivacy",
@@ -54,7 +58,8 @@
         "option:redirect-rule": 1
       },
       "rules": 9197,
-      "droppedByLimit": 0
+      "droppedByLimit": 0,
+      "tooBroad": []
     },
     {
       "id": "antiadblock",
@@ -68,10 +73,11 @@
         "cosmetic:extended": 3
       },
       "rules": 175,
-      "droppedByLimit": 0
+      "droppedByLimit": 0,
+      "tooBroad": []
     },
     {
-      "id": "libreadblocker",
+      "id": "largo",
       "version": null,
       "lines": 12,
       "networkFilters": 0,
@@ -80,7 +86,21 @@
       "cosmeticConverted": 1,
       "skipped": {},
       "rules": 0,
-      "droppedByLimit": 0
+      "droppedByLimit": 0,
+      "tooBroad": []
+    },
+    {
+      "id": "links",
+      "version": null,
+      "lines": 112,
+      "networkFilters": 91,
+      "cosmeticFilters": 0,
+      "networkConverted": 91,
+      "cosmeticConverted": 0,
+      "skipped": {},
+      "rules": 89,
+      "droppedByLimit": 0,
+      "tooBroad": []
     }
   ]
 }

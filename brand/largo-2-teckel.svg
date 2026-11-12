@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Largo Ad Blocker — Teckel</title>
+  <rect width="512" height="512" rx="116" fill="#FFD400"/>
+  <g transform="translate(256 270) scale(1.08) translate(-256 -270)">
+    <g fill="#111111">
+      <path d="M124 262Q92 250 84 196" fill="none" stroke="#111111" stroke-width="26" stroke-linecap="round"/>
+      <rect x="128" y="300" width="46" height="84" rx="23"/>
+      <rect x="330" y="300" width="46" height="84" rx="23"/>
+      <rect x="104" y="228" width="296" height="100" rx="50"/>
+      <circle cx="384" cy="216" r="58"/>
+      <rect x="372" y="206" width="90" height="48" rx="24"/>
+      <ellipse cx="350" cy="258" rx="30" ry="56"/>
+    </g>
+    <path d="M374 204Q392 262 368 306" fill="none" stroke="#FFD400" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="410" cy="202" r="10" fill="#FFD400"/>
+  </g>
+</svg>

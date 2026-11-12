@@ -162,10 +162,17 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  ws: 8.22.1
+  ansi-regex: 6.5.0
+
 importers:
 
   .:
     devDependencies:
+      '@duckduckgo/autoconsent':
+        specifier: 16.63.0
+        version: 16.63.0
       '@types/chrome':
         specifier: ^0.3.7
         version: 0.3.7
@@ -186,6 +193,9 @@ importers:
         version: 7.0.2
 
 packages:
+
+  '@duckduckgo/autoconsent@16.63.0':
+    resolution: {integrity: sha512-h5cued2ofnqggiVz2vRd4OHqRzVv76cWe+gttPqNMqWDD9tiF8AMzBj3+Vpfo67JvnOx6vwXVLLayHpJf06XJA==}
 
   '@esbuild/aix-ppc64@0.28.2':
     resolution: {integrity: sha512-XExcO+dvLKvVtNTibSTBej1NCAbaGhWn9Ww1ZPx80qsahhPFe/8jgWP0IchNe0F3HwkU7n8ejhH8bjonqht8mQ==}
@@ -485,8 +495,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  ansi-regex@6.6.0:
-    resolution: {integrity: sha512-XZ5apbzreCbXSKwPjJstu8R0zOi247w3XYwWxtwBXgpZrCyc1Ka7p9/xY0A9/diMewmHbEKz+FIraWaEWjlN5g==}
+  ansi-regex@6.5.0:
+    resolution: {integrity: sha512-zhvbbbdt1kbw7EJ9OQoxmQcuaNR9P5kTj7e/YdmOSU10aHWbycofJxA6jKfoEy3vlLdctOF9ZHaxLtmSm998wQ==}
     engines: {node: '>=12'}
 
   ansi-styles@6.2.3:
@@ -571,8 +581,8 @@ packages:
     resolution: {integrity: sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==}
     engines: {node: '>=18'}
 
-  ws@8.22.2:
-    resolution: {integrity: sha512-/rEZ2ejown2N5gxVTHUu9bVVC7ttu0/Tgzf5hbTOixR3Fs7mbbXgn2DbdbcKgJOmpQMtrIUWivtYuVMnp/W/yA==}
+  ws@8.22.1:
+    resolution: {integrity: sha512-oyL6OPYme/CmiFvNuGzeoxCJ4nOrZE2O1FwM9MWM1AsGri6nLXB2pg+lNA8aLeXMSav0J6eIVS1j6vUPzUtK9g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -599,6 +609,8 @@ packages:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
 snapshots:
+
+  '@duckduckgo/autoconsent@16.63.0': {}
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true
@@ -753,7 +765,7 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  ansi-regex@6.6.0: {}
+  ansi-regex@6.5.0: {}
 
   ansi-styles@6.2.3: {}
 
@@ -821,7 +833,7 @@ snapshots:
       devtools-protocol: 0.0.1704951
       typed-query-selector: 2.12.3
       webdriver-bidi-protocol: 1.0.1
-      ws: 8.22.2
+      ws: 8.22.1
     transitivePeerDependencies:
       - bufferutil
       - proxy-agent
@@ -841,7 +853,7 @@ snapshots:
 
   strip-ansi@7.2.0:
     dependencies:
-      ansi-regex: 6.6.0
+      ansi-regex: 6.5.0
 
   typed-query-selector@2.12.3: {}
 
@@ -878,7 +890,7 @@ snapshots:
       string-width: 7.2.0
       strip-ansi: 7.2.0
 
-  ws@8.22.2: {}
+  ws@8.22.1: {}
 
   y18n@5.0.8: {}
 

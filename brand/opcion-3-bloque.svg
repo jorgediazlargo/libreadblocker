@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>libreadblocker — Bloque</title>
+  <rect width="512" height="512" rx="116" fill="#FFD60A"/>
+  <path d="M110 162H168V330Q168 362 200 362H240" fill="none" stroke="#0C0C10" stroke-width="52"/>
+  <rect x="282" y="136" width="120" height="252" fill="#0C0C10"/>
+</svg>

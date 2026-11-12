@@ -26,15 +26,20 @@ export function hostCandidates(hostname: string): string[] {
   return out;
 }
 
+/** Lectura sin cadena de prototipos: un host llamado "constructor" no debe encontrar nada. */
+function own(map: Record<string, number[]>, key: string): number[] {
+  return Object.hasOwn(map, key) ? map[key]! : [];
+}
+
 export function selectorsFor(hostname: string, d: CosmeticPayload): string[] {
   const cands = hostCandidates(hostname);
   const hide = new Set<number>();
-  for (const c of cands) for (const i of d.h[c] ?? []) hide.add(i);
+  for (const c of cands) for (const i of own(d.h, c)) hide.add(i);
   if (d.g && !(d.gh && cands.some((c) => d.gh!.includes(c)))) {
     const set = new Set(cands);
     for (const [i, domains] of d.g) if (!domains.some((x) => set.has(x))) hide.add(i);
   }
-  for (const c of cands) for (const i of d.x[c] ?? []) hide.delete(i);
+  for (const c of cands) for (const i of own(d.x, c)) hide.delete(i);
   return [...hide].map((i) => d.s[i]!);
 }
 

@@ -1,13 +1,6 @@
-// Lista blanca de sitios (chrome.storage.sync) y su aplicación:
-//  - una regla DNR dinámica allowAllRequests con los sitios permitidos;
-//  - los content scripts cosméticos se registran con excludeMatches para esos sitios.
-
-import { hostPattern, isMatchableHost } from '../convert/buckets.ts';
+// Lista blanca de sitios (chrome.storage.sync). La aplica applyConfig (apply.ts).
 
 export const ALLOWLIST_KEY = 'allowlist';
-const ALLOW_RULE_ID = 1;
-/** Por encima de cualquier regla estática (1 normal, 2 $important). */
-const ALLOW_PRIORITY = 1000;
 
 const HOST_RE = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/;
 
@@ -43,66 +36,4 @@ export async function getAllowlist(): Promise<string[]> {
 export async function setSiteEnabled(hostname: string, enabled: boolean): Promise<void> {
   const list = toggleInList(await getAllowlist(), hostname, enabled);
   await chrome.storage.sync.set({ [ALLOWLIST_KEY]: list });
-  await applyAllowlist(list);
-}
-
-interface Registry {
-  buckets: { id: string; matches: string[] }[];
-  elemhide: string[];
-  generichide: string[];
-}
-
-let lastApplied: string | undefined;
-
-export async function applyAllowlist(list?: string[]): Promise<void> {
-  const hosts = list ?? (await getAllowlist());
-  const key = JSON.stringify(hosts);
-  if (key === lastApplied) return;
-
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [ALLOW_RULE_ID],
-    addRules: hosts.length
-      ? [
-          {
-            id: ALLOW_RULE_ID,
-            priority: ALLOW_PRIORITY,
-            action: { type: 'allowAllRequests' as chrome.declarativeNetRequest.RuleActionType },
-            condition: {
-              requestDomains: hosts,
-              resourceTypes: ['main_frame' as chrome.declarativeNetRequest.ResourceType],
-            },
-          },
-        ]
-      : [],
-  });
-
-  const registry: Registry = await (await fetch(chrome.runtime.getURL('content/registry.json'))).json();
-  const allowed = hosts.map((h) => (isMatchableHost(h) ? hostPattern(h) : `*://${h}/*`));
-  const exclude = [...allowed, ...registry.elemhide];
-  const common = { runAt: 'document_start' as const, persistAcrossSessions: true };
-  const scripts: chrome.scripting.RegisteredContentScript[] = [
-    {
-      ...common,
-      id: 'generic',
-      css: ['content/generic.css'],
-      matches: ['<all_urls>'],
-      excludeMatches: [...exclude, ...registry.generichide],
-      allFrames: true,
-      matchOriginAsFallback: true,
-    },
-    { ...common, id: 'always', js: ['content/always.js'], matches: ['<all_urls>'], excludeMatches: exclude },
-    ...registry.buckets.map((b) => ({
-      ...common,
-      id: b.id,
-      js: [`content/${b.id}.js`],
-      matches: b.matches,
-      excludeMatches: exclude,
-    })),
-  ];
-
-  // Reemplazo completo: más simple que calcular diferencias y no deja estados a medias.
-  const existing = await chrome.scripting.getRegisteredContentScripts();
-  if (existing.length) await chrome.scripting.unregisterContentScripts({ ids: existing.map((s) => s.id) });
-  await chrome.scripting.registerContentScripts(scripts);
-  lastApplied = key;
 }

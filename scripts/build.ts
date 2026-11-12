@@ -3,6 +3,7 @@
 import { build } from 'esbuild';
 import { cp, mkdir, readdir, readFile, rm, writeFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DIST = join(ROOT, 'dist');
@@ -50,6 +51,67 @@ await Promise.all(
     });
   }),
 );
+
+// Rechazo de cookies: Autoconsent con sus reglas compactas incrustadas. El script de la
+// página lleva todas; el de los iframes, solo el tramo de reglas que se ejecutan en frames
+// (unas decenas), para no cargar ~450 KB de reglas en cada iframe.
+type Indexed = import('@duckduckgo/autoconsent').IndexedCMPRuleset;
+const consentRules: Indexed = JSON.parse(
+  await readFile(fileURLToPath(import.meta.resolve('@duckduckgo/autoconsent/rules/compact-rules.json')), 'utf8'),
+);
+const [frameStart, frameEnd] = consentRules.index.frameRuleRange;
+const frameRuleList = consentRules.r.slice(frameStart, frameEnd);
+// Las reglas guardan índices a la tabla de cadenas. Se vacían las que ningún número de estas
+// reglas puede señalar (de más, nunca de menos): la tabla pasa de ~94 KB a ~12 KB.
+const frameNumbers = new Set<number>();
+const collectNumbers = (v: unknown): void => {
+  if (typeof v === 'number') frameNumbers.add(v);
+  else if (v && typeof v === 'object') Object.values(v).forEach(collectNumbers);
+};
+for (const rule of frameRuleList) rule.slice(5).forEach(collectNumbers);
+const frameRules: Indexed = {
+  v: consentRules.v,
+  s: consentRules.s.slice(0, consentRules.index.frameStringEnd).map((str, i) => (frameNumbers.has(i) ? str : '')),
+  r: frameRuleList,
+  index: { ...consentRules.index, genericRuleRange: [0, 0], specificRuleRange: [0, 0], frameRuleRange: [0, frameEnd - frameStart], genericStringEnd: 0 },
+};
+// El recorte depende del formato interno del índice: si una versión nueva lo cambia, que falle
+// aquí. Se compara con el filtrado oficial en una URL cualquiera y en las de las reglas por sitio.
+{
+  const { filterCompactRules } = await import('@duckduckgo/autoconsent');
+  const sampleUrl = (pattern: string) =>
+    pattern.split('|')[0]!.replace(/^\^/, '').replace('https?', 'https').replace('(www\\.)?', '').replace(/\\\./g, '.');
+  const urls = frameRules.r.map((r) => sampleUrl(r[3])).filter((u, i) => u && new RegExp(frameRules.r[i]![3]).test(u));
+  for (const url of ['https://example.com/', ...urls]) {
+    const ctx = { url, mainFrame: false };
+    if (JSON.stringify(filterCompactRules(frameRules, ctx)) !== JSON.stringify(filterCompactRules(consentRules, ctx))) {
+      console.error(`Las reglas de cookies para iframes no coinciden con las completas (${url}): revisa el recorte en build.ts.`);
+      process.exit(1);
+    }
+  }
+  if (urls.length < frameRules.r.length / 2) {
+    console.error('No se han podido comprobar las reglas de cookies para iframes: revisa sampleUrl en build.ts.');
+    process.exit(1);
+  }
+}
+await Promise.all(
+  [
+    { file: 'consent.js', rules: consentRules, mainFrame: true },
+    { file: 'consent-frame.js', rules: frameRules, mainFrame: false },
+  ].map(({ file, rules, mainFrame }) =>
+    build({
+      ...common,
+      stdin: {
+        contents: `import { run } from './src/content/consent.ts';\nrun(JSON.parse(${JSON.stringify(JSON.stringify(rules))}), ${mainFrame});`,
+        resolveDir: ROOT,
+        loader: 'ts',
+      },
+      outfile: join(DIST, 'content', file),
+      format: 'iife',
+    }),
+  ),
+);
+
 await cp(join(cosmeticDir, 'generic.css'), join(DIST, 'content/generic.css'));
 await cp(join(cosmeticDir, 'registry.json'), join(DIST, 'content/registry.json'));
 
@@ -89,4 +151,4 @@ async function du(dir: string): Promise<number> {
   return total;
 }
 const size = await du(DIST);
-console.log(`dist/ listo: ${(size / 1024 / 1024).toFixed(2)} MB (${payloads.length} content scripts, ${rulesets.length} rulesets)`);
+console.log(`dist/ listo: ${(size / 1024 / 1024).toFixed(2)} MB (${payloads.length + 2} content scripts, ${rulesets.length} rulesets)`);

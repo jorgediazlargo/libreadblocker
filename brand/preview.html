@@ -1,0 +1,73 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>libreadblocker — opciones de marca</title>
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1560px; padding: 48px; background: #F4F3EF; color: #15151A; font-family: "Avenir Next", "Helvetica Neue", sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .card { background: #fff; border-radius: 28px; overflow: hidden; border: 1px solid #E4E2DB; }
+  .hero { height: 340px; display: grid; place-items: center; }
+  .hero img { width: 208px; height: 208px; }
+  .meta { padding: 22px 28px 6px; }
+  .num { font-size: 13px; font-weight: 600; letter-spacing: .12em; color: #8A8A93; }
+  .name { font-size: 30px; font-weight: 700; margin-top: 2px; }
+  .idea { font-size: 15px; line-height: 1.45; color: #55555E; margin-top: 6px; min-height: 66px; }
+  .bars { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 28px; }
+  .bar { height: 64px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 16px; }
+  .bar.l { background: #F1F3F4; } .bar.d { background: #202124; }
+  .lock { height: 108px; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 34px; }
+  .lock img { width: 52px; height: 52px; }
+
+  .o1 .hero { background: #1A1B21; }
+  .o1 .lock { font-weight: 800; letter-spacing: -.01em; }
+  .o1 .lock.a { background: #0C0C10; color: #fff; } .o1 .lock.a b { color: #C8FF2E; font-weight: 800; }
+  .o1 .lock.b { color: #0C0C10; } .o1 .lock.b span { font-weight: 500; }
+
+  .o2 .hero { background: #EDE7FF; }
+  .o2 .lock { font-family: "Arial Rounded MT Bold", "Avenir Next", sans-serif; letter-spacing: -.02em; }
+  .o2 .lock.a { background: #5B2BFF; color: #FFF7EA; }
+  .o2 .lock.b { color: #5B2BFF; }
+
+  .o3 .hero { background: #0C0C10; }
+  .o3 .lock { font-family: "SF Mono", Menlo, monospace; font-weight: 700; font-size: 31px; letter-spacing: -.02em; gap: 0; }
+  .o3 .lock i { font-style: normal; padding: 2px 5px; margin: 0 3px; }
+  .o3 .lock.a { background: #FFD60A; color: #0C0C10; } .o3 .lock.a i { background: #0C0C10; color: #FFD60A; }
+  .o3 .lock.b { background: #0C0C10; color: #FFD60A; } .o3 .lock.b i { background: #FFD60A; color: #0C0C10; }
+</style>
+<div class="grid">
+  <section class="card o1">
+    <div class="hero"><img src="opcion-1-hueco.svg"></div>
+    <div class="meta"><div class="num">OPCIÓN 1</div><div class="name">Hueco</div>
+      <div class="idea">Una L de «libre» que es la página sin su anuncio: el bloque que falta sale despedido. Lima ácido sobre negro.</div></div>
+    <div class="bars">
+      <div class="bar l"><img src="opcion-1-hueco.svg" width="48"><img src="opcion-1-hueco.svg" width="32"><img src="opcion-1-hueco.svg" width="16"></div>
+      <div class="bar d"><img src="opcion-1-hueco.svg" width="48"><img src="opcion-1-hueco.svg" width="32"><img src="opcion-1-hueco.svg" width="16"></div>
+    </div>
+    <div class="lock a"><img src="opcion-1-hueco.svg"><div><b>libre</b>adblocker</div></div>
+    <div class="lock b"><img src="opcion-1-hueco.svg"><div>libre<span>adblocker</span></div></div>
+  </section>
+
+  <section class="card o2">
+    <div class="hero"><img src="opcion-2-liebre.svg"></div>
+    <div class="meta"><div class="num">OPCIÓN 2</div><div class="name">Liebre</div>
+      <div class="idea">Mascota: libre → liebre. Rápida, suelta y con cara propia; ningún otro bloqueador tiene una. Ultravioleta y crema.</div></div>
+    <div class="bars">
+      <div class="bar l"><img src="opcion-2-liebre.svg" width="48"><img src="opcion-2-liebre.svg" width="32"><img src="opcion-2-liebre.svg" width="16"></div>
+      <div class="bar d"><img src="opcion-2-liebre.svg" width="48"><img src="opcion-2-liebre.svg" width="32"><img src="opcion-2-liebre.svg" width="16"></div>
+    </div>
+    <div class="lock a"><img src="opcion-2-liebre.svg"><div>libreadblocker</div></div>
+    <div class="lock b"><img src="opcion-2-liebre.svg"><div>libreadblocker</div></div>
+  </section>
+
+  <section class="card o3">
+    <div class="hero"><img src="opcion-3-bloque.svg"></div>
+    <div class="meta"><div class="num">OPCIÓN 3</div><div class="name">Bloque</div>
+      <div class="idea">Tipográfica: una «l» y un cursor de terminal que es también el bloque. En el nombre, «ad» queda encerrado. Amarillo señal y negro.</div></div>
+    <div class="bars">
+      <div class="bar l"><img src="opcion-3-bloque.svg" width="48"><img src="opcion-3-bloque.svg" width="32"><img src="opcion-3-bloque.svg" width="16"></div>
+      <div class="bar d"><img src="opcion-3-bloque.svg" width="48"><img src="opcion-3-bloque.svg" width="32"><img src="opcion-3-bloque.svg" width="16"></div>
+    </div>
+    <div class="lock a"><div>libre<i>ad</i>blocker</div></div>
+    <div class="lock b"><div>libre<i>ad</i>blocker</div></div>
+  </section>
+</div>

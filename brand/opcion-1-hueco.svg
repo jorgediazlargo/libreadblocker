@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>libreadblocker — Hueco</title>
+  <rect width="512" height="512" rx="116" fill="#0C0C10"/>
+  <rect x="280" y="94" width="132" height="132" rx="20" transform="rotate(14 346 160)" fill="#3A3D48"/>
+  <path d="M124 124H220V292H388V388H124Z" fill="#C8FF2E" stroke="#C8FF2E" stroke-width="28" stroke-linejoin="round"/>
+</svg>
