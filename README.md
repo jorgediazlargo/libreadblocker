@@ -132,4 +132,6 @@ Código bajo GPLv3 o posterior (`LICENSE`). Las reglas derivan de EasyList, Easy
 (© The EasyList authors, GPLv3 / CC BY-SA 3.0), y el rechazo de cookies usa Autoconsent
 (© Duck Duck Go, Inc., MPL 2.0); ver `ATTRIBUTION.md`, que se incluye en `dist/`.
 
-La extensión **no está publicada** en la Chrome Web Store.
+La extensión **no está publicada** en la Chrome Web Store. Para publicarla, sigue
+[`store/PUBLICAR.md`](store/PUBLICAR.md); la ficha, los permisos justificados y las imágenes están
+en [`store/`](store/), y la política de privacidad en [`PRIVACY.md`](PRIVACY.md).
