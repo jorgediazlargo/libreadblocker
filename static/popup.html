@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Largo Ad Blocker</title>
@@ -15,26 +15,25 @@
     <label class="switch">
       <input type="checkbox" id="toggle" checked>
       <span class="track"><span class="thumb"></span></span>
-      <span id="status">Bloqueo activo en este sitio</span>
+      <span id="status" data-i18n="siteOn">Blocking on for this site</span>
     </label>
-    <div class="count"><strong id="count">—</strong> peticiones bloqueadas en esta pestaña</div>
+    <div class="count"><strong id="count">—</strong> <span id="count-label" data-i18n="blockedMany">requests blocked on this tab</span></div>
   </main>
   <section class="modules">
     <label class="switch">
       <input type="checkbox" id="links" data-module="links">
       <span class="track"><span class="thumb"></span></span>
-      <span>Quitar el rastreo de los enlaces</span>
+      <span data-i18n="moduleLinks">Strip tracking from links</span>
     </label>
     <label class="switch">
       <input type="checkbox" id="cookies" data-module="cookies">
       <span class="track"><span class="thumb"></span></span>
-      <span>Rechazar los avisos de cookies</span>
+      <span data-i18n="moduleCookies">Reject cookie banners</span>
     </label>
   </section>
   <footer>
-    Filtros: <span id="lists"></span><br>
-    EasyList, EasyPrivacy y Adblock Warning Removal List © The EasyList authors · GPLv3 / CC BY-SA 3.0
-    <br>Autoconsent © Duck Duck Go, Inc. · MPL 2.0
+    <span id="lists"></span>
+    <a href="https://github.com/jorgediazlargo/libreadblocker/blob/main/ATTRIBUTION.md" target="_blank" rel="noopener" data-i18n="licenses">Licenses</a>
   </footer>
   <script src="popup.js"></script>
 </body>

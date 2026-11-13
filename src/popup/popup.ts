@@ -4,6 +4,17 @@ import meta from '../../generated/meta.json' with { type: 'json' };
 import allowIdsJson from '../../generated/allow-ids.json' with { type: 'json' };
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+const t = (key: string, ...subs: string[]) => chrome.i18n.getMessage(key, subs);
+const lang = chrome.i18n.getUILanguage();
+
+// Textos en el idioma de Chrome (_locales; inglés por defecto).
+document.documentElement.lang = lang;
+for (const el of document.querySelectorAll<HTMLElement>('[data-i18n]')) el.textContent = t(el.dataset.i18n!);
+
+function showCount(n: number | null) {
+  $('count').textContent = n === null ? '—' : n.toLocaleString(lang);
+  $('count-label').textContent = t(n === 1 ? 'blockedOne' : 'blockedMany');
+}
 
 async function currentTab(): Promise<chrome.tabs.Tab | undefined> {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -28,7 +39,7 @@ async function blockedCount(tabId: number): Promise<number | null> {
 
 function render(host: string, enabled: boolean) {
   $<HTMLInputElement>('toggle').checked = enabled;
-  $('status').textContent = enabled ? 'Bloqueo activo en este sitio' : 'Bloqueo desactivado en este sitio';
+  $('status').textContent = t(enabled ? 'siteOn' : 'siteOff');
   document.body.classList.toggle('off', !enabled);
   $('host').textContent = host;
 }
@@ -49,15 +60,23 @@ async function modules() {
 }
 
 async function main() {
-  const versions = meta.lists.map((l) => `${l.name} ${l.version ?? ''}`.trim()).join(' · ');
-  $('lists').textContent = versions;
+  // Las listas van dentro del paquete: su fecha es la de la última versión publicada.
+  // Se muestra la más antigua y, al pasar el ratón, el detalle de cada lista.
+  const stamps = meta.lists.map((l) => l.version).filter((v): v is string => /^\d{8}/.test(v ?? ''));
+  const oldest = stamps.sort()[0];
+  const lists = $('lists');
+  const version = `v${chrome.runtime.getManifest().version}`;
+  lists.textContent = oldest
+    ? `${version} · ${t('filtersFrom', new Date(+oldest.slice(0, 4), +oldest.slice(4, 6) - 1, +oldest.slice(6, 8)).toLocaleDateString(lang, { day: 'numeric', month: 'short', year: 'numeric' }))}`
+    : version;
+  lists.title = [t('version', chrome.runtime.getManifest().version), ...meta.lists.map((l) => `${l.name} ${l.version ?? ''}`.trim())].join('\n');
   void modules();
 
   const tab = await currentTab();
   const url = tab?.url ? new URL(tab.url) : null;
   if (!tab?.id || !url || !/^https?:$/.test(url.protocol) || !isValidHost(url.hostname)) {
     document.body.classList.add('na');
-    $('host').textContent = 'Página no compatible';
+    $('host').textContent = t('unsupported');
     return;
   }
   const tabId = tab.id;
@@ -67,7 +86,7 @@ async function main() {
   render(entry ?? host.replace(/^www\./, ''), !entry);
 
   const count = await blockedCount(tabId);
-  $('count').textContent = count === null ? '—' : count.toLocaleString('es-ES');
+  showCount(count);
 
   $<HTMLInputElement>('toggle').addEventListener('change', async (e) => {
     const enabled = (e.target as HTMLInputElement).checked;
@@ -76,7 +95,7 @@ async function main() {
     await chrome.runtime.sendMessage({ type: 'set-site', host, enabled });
     const now = matchingEntry(host, await getAllowlist());
     render(now ?? host.replace(/^www\./, ''), !now);
-    $('count').textContent = '0';
+    showCount(0);
     input.disabled = false;
     await chrome.tabs.reload(tabId);
   });

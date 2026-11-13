@@ -1,30 +1,30 @@
-# Atribución
+# Attribution
 
-Largo Ad Blocker incluye reglas derivadas de estas listas de filtros:
+Largo Ad Blocker includes rules derived from these filter lists:
 
 - **EasyList** — https://easylist.to/ — © The EasyList authors
   (https://github.com/easylist/easylist/graphs/contributors)
 - **EasyPrivacy** — https://easylist.to/ — © The EasyList authors
 - **Adblock Warning Removal List** — https://github.com/easylist/antiadblockfilters — © The EasyList authors
 
-Las tres listas se distribuyen con doble licencia, a elegir:
+All three lists are dual-licensed, at your choice, under:
 
-- GNU General Public License v3 o posterior (https://www.gnu.org/licenses/gpl-3.0.html)
+- GNU General Public License v3 or later (https://www.gnu.org/licenses/gpl-3.0.html)
 - Creative Commons Attribution-ShareAlike 3.0 Unported (https://creativecommons.org/licenses/by-sa/3.0/)
 
-Licencia de las listas: https://easylist.to/pages/licence.html
+List license: https://easylist.to/pages/licence.html
 
-Las reglas de `rules/` y los selectores de `content/` son una transformación automática de
-esas listas (conversión a reglas declarativeNetRequest de Chrome y a CSS) hecha por
-`scripts/update-lists.ts`. Se han descartado los filtros que Chrome no puede expresar.
-Este trabajo derivado se distribuye bajo GPLv3 (ver `LICENSE`).
+The rules in `rules/` and the selectors in `content/` are an automatic transformation of those lists
+(conversion to Chrome declarativeNetRequest rules and to CSS) made by `scripts/update-lists.ts`.
+Filters that Chrome cannot express have been dropped. This derived work is distributed under GPLv3
+(see `LICENSE`).
 
 ## Autoconsent
 
-El rechazo automático de avisos de cookies (`content/consent.js`, `content/consent-frame.js` y
-los fragmentos que ejecuta `background.js`) incluye, sin modificar, la biblioteca y las reglas de
-**Autoconsent** — https://github.com/duckduckgo/autoconsent — © Duck Duck Go, Inc.
+Automatic cookie banner rejection (`content/consent.js`, `content/consent-frame.js` and the snippets
+run by `background.js`) includes, unmodified, the library and rules of **Autoconsent** —
+https://github.com/duckduckgo/autoconsent — © Duck Duck Go, Inc.
 
-Se distribuye bajo la Mozilla Public License 2.0 (https://www.mozilla.org/MPL/2.0/). El código
-fuente de la versión incluida (la fijada en `package.json`) está en
-https://www.npmjs.com/package/@duckduckgo/autoconsent y en el repositorio anterior.
+It is distributed under the Mozilla Public License 2.0 (https://www.mozilla.org/MPL/2.0/). The source
+code of the included version (the one pinned in `package.json`) is available at
+https://www.npmjs.com/package/@duckduckgo/autoconsent and in the repository above.

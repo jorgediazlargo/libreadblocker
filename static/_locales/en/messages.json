@@ -1,0 +1,14 @@
+{
+  "extDescription": { "message": "Blocks ads and trackers with EasyList and EasyPrivacy. No telemetry, no requests of its own." },
+  "siteOn": { "message": "Blocking on for this site" },
+  "siteOff": { "message": "Blocking off for this site" },
+  "unsupported": { "message": "Page not supported" },
+  "blockedOne": { "message": "request blocked on this tab" },
+  "blockedMany": { "message": "requests blocked on this tab" },
+  "moduleLinks": { "message": "Strip tracking from links" },
+  "moduleCookies": { "message": "Reject cookie banners" },
+  "filtersFrom": { "message": "Filters from $DATE$", "placeholders": { "date": { "content": "$1" } } },
+  "filters": { "message": "Filters" },
+  "version": { "message": "Version $V$", "placeholders": { "v": { "content": "$1" } } },
+  "licenses": { "message": "Licenses" }
+}

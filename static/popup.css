@@ -58,11 +58,16 @@ main { padding: 14px; display: grid; gap: 12px; }
 .count { color: var(--muted); }
 .count strong { color: var(--fg); font-variant-numeric: tabular-nums; }
 footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 14px 10px;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 11px;
 }
+footer a { color: inherit; }
+footer a:hover { color: var(--fg); }
 .modules { padding: 12px 14px; display: grid; gap: 10px; border-top: 1px solid var(--line); }
 .modules .track { background: var(--muted); }
 body.na main .switch, body.na .count { display: none; }

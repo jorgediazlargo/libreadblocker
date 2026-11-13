@@ -1,137 +1,142 @@
 # Largo Ad Blocker
 
-Extensión de Chrome (Manifest V3) que bloquea anuncios y rastreadores con
-[EasyList](https://easylist.to/), EasyPrivacy y la Adblock Warning Removal List, que quita los
-avisos de "desactiva tu bloqueador". Además quita los parámetros de rastreo de los enlaces
-(`utm_*`, `fbclid`, `gclid`…) y pulsa "rechazar" en los avisos de cookies. No tiene telemetría,
-cuentas ni peticiones de red propias. Tampoco tiene anuncios aceptables.
+A Chrome extension (Manifest V3) that blocks ads and trackers with [EasyList](https://easylist.to/),
+EasyPrivacy and the Adblock Warning Removal List, which removes "turn off your ad blocker" walls. It
+also strips tracking parameters from links (`utm_*`, `fbclid`, `gclid`…) and clicks "reject" on
+cookie banners. No telemetry, no accounts and no network requests of its own. No "acceptable ads"
+either.
 
-`dist/` ocupa ~5,3 MB. Al cargarla, Chrome añade ~4,2 MB de índices de reglas en
-`dist/_metadata`, así que la extensión instalada ocupa ~9,7 MB.
+The UI is in English, with a Spanish translation (`static/_locales/`); Chrome picks one based on
+the browser language.
 
-## Uso
+`dist/` is ~5.3 MB. When loaded, Chrome adds ~4.2 MB of rule indexes in `dist/_metadata`, so the
+installed extension takes ~9.7 MB.
+
+## Usage
 
 ```bash
 pnpm install
-pnpm build          # deja dist/ listo
+pnpm build          # builds dist/
+pnpm package        # clean build + largo-ad-blocker-<version>.zip for the Chrome Web Store
 ```
 
-En `chrome://extensions`, activa el modo de desarrollador, pulsa **Cargar descomprimida** y elige `dist/`.
+In `chrome://extensions`, turn on developer mode, click **Load unpacked** and pick `dist/`.
 
-El icono muestra cuántas peticiones se han bloqueado en la pestaña. El popup permite desactivar el
-bloqueo en el sitio actual. La lista blanca se guarda en `chrome.storage.sync`, así que se comparte
-entre equipos con la misma cuenta de Chrome; caben unos 400 sitios por el límite de 8 KB por clave.
+The icon shows how many requests were blocked on the tab. The popup turns blocking off for the
+current site. The allowlist is stored in `chrome.storage.sync`, so it is shared across computers
+signed in to the same Chrome account; it fits about 400 sites because of the 8 KB per-key limit.
 
-## Actualizar las listas
+## Updating the lists
 
 ```bash
-pnpm update-lists   # descarga las listas y regenera generated/
+pnpm update-lists   # downloads the lists and regenerates generated/
 pnpm build
 ```
 
-Después, pulsa ↻ en la tarjeta de la extensión en `chrome://extensions`. Las reglas generadas
-(`generated/`) se versionan en el repo, de modo que el build no necesita red.
-`pnpm update-lists --offline` reutiliza las listas guardadas en `.cache/lists`.
+Then click ↻ on the extension card in `chrome://extensions`. The generated rules (`generated/`) are
+committed, so the build needs no network. `pnpm update-lists --offline` reuses the lists cached in
+`.cache/lists`.
 
-## Enlaces sin rastreo
+Manifest V3 doesn't allow downloading rules at runtime, so users only get new filters when a new
+version is published. The popup footer shows the date of the oldest bundled list.
 
-`filters/largo-links.txt` lista los parámetros que solo sirven para rastrear campañas y clics, con
-la sintaxis `$removeparam=nombre`. Se convierten en reglas DNR `redirect` con
-`queryTransform.removeParams` en un ruleset aparte (`links`), que se apaga desde el popup.
+## Clean links
 
-- Solo nombres exactos: DNR no admite regex ni comodines, así que `utm_*` va parámetro a parámetro.
-- Sin tipo de recurso, la regla se aplica solo a la navegación principal (`main_frame`).
-- Una regla sin patrón de URL solo salta si la URL lleva el parámetro (`^nombre=`) y los quita todos
-  en una sola redirección.
-- No incluye identificadores de afiliación (`irclickid`, `tag`…): quitarlos rompe cashback y comisiones.
-- En los sitios de la lista blanca no se toca la URL.
+`filters/largo-links.txt` lists the parameters that only exist to track campaigns and clicks, using
+the `$removeparam=name` syntax. They become DNR `redirect` rules with `queryTransform.removeParams`
+in a separate ruleset (`links`), which can be switched off from the popup.
 
-## Avisos de cookies
+- Exact names only: DNR has no regex or wildcards here, so `utm_*` is listed one parameter at a time.
+- With no resource type, a rule only applies to top-level navigation (`main_frame`).
+- A rule with no URL pattern only fires when the URL carries the parameter (`^name=`) and removes all
+  of them in a single redirect.
+- Affiliate identifiers (`irclickid`, `tag`…) are not included: removing them breaks cashback and
+  commissions.
+- URLs on allowlisted sites are left untouched.
 
-Usa [Autoconsent](https://github.com/duckduckgo/autoconsent) de DuckDuckGo (MPL 2.0), con sus
-reglas para varios cientos de gestores de consentimiento y sitios: detecta el aviso y pulsa
-"rechazar" (o llama a la API del gestor). Si no hay regla, busca un botón de rechazo por su texto.
-Si el aviso no permite rechazar, se queda como está: **nunca acepta ni oculta**.
+## Cookie banners
 
-- Los muros de "acepta o suscríbete" (Marca, La Vanguardia…) no ofrecen rechazo gratuito y se
-  quedan como están.
-- Algunas reglas necesitan leer variables de la página (`window.Cookiebot`, por ejemplo). El
-  content script se lo pide al service worker, que ejecuta con `chrome.scripting` uno de los
-  fragmentos predefinidos de Autoconsent, elegido por nombre; nunca código que llegue en el
-  mensaje. Por eso, con este módulo activo, el service worker se despierta al cargar cada página.
-- La versión de Autoconsent está fijada en `package.json`; sus reglas se actualizan subiendo esa
-  versión y ejecutando `pnpm build`.
-- `node scripts/_modules.ts [links|cookies] [url…]` prueba los dos módulos en Chrome real y deja
-  capturas con y sin extensión en `.cache/modules/`.
+Uses DuckDuckGo's [Autoconsent](https://github.com/duckduckgo/autoconsent) (MPL 2.0), with its rules
+for several hundred consent managers and sites: it detects the banner and clicks "reject" (or calls
+the consent manager's API). If there is no rule, it looks for a reject button by its text. If the
+banner has no way to reject, it is left alone: **it never accepts and never hides**.
 
-## Arreglos propios
+- "Accept or subscribe" walls offer no free reject option and are left as they are.
+- Some rules need to read page variables (`window.Cookiebot`, for example). The content script asks
+  the service worker, which runs one of Autoconsent's predefined snippets, chosen by name, with
+  `chrome.scripting`; never code that arrives in the message. That is why, with this module on, the
+  service worker wakes up on every page load.
+- The Autoconsent version is pinned in `package.json`; its rules are updated by bumping that version
+  and running `pnpm build`.
+- `node scripts/_modules.ts [links|cookies] [url…]` tests both modules in real Chrome and saves
+  screenshots with and without the extension in `.cache/modules/`.
 
-`filters/largo.txt` es una lista propia con sintaxis de Adblock Plus que se convierte junto con
-EasyList y las demás listas. Sirve para casos que esas listas no cubren, como el muro
-anti-bloqueador de Google Funding Choices (El País, por ejemplo). Después de editarla, ejecuta
-`pnpm update-lists --offline && pnpm build`.
+## Custom fixes
 
-## Cómo funciona
+`filters/largo.txt` is our own list in Adblock Plus syntax, converted together with EasyList and the
+other lists. It covers cases those lists miss, such as Google Funding Choices' anti-adblock wall.
+After editing it, run `pnpm update-lists --offline && pnpm build`.
 
-| Pieza | Qué hace | Cuándo se ejecuta |
+## How it works
+
+| Piece | What it does | When it runs |
 |---|---|---|
-| `rules/*.json` | Reglas estáticas `declarativeNetRequest` generadas en build | Las aplica Chrome; la extensión no ejecuta código |
-| `content/generic.css` | Selectores genéricos de EasyList | Chrome inyecta el CSS en cada frame (sin JS) |
-| `content/always.js` | ~300 selectores genéricos con excepciones por sitio y reglas para `ejemplo.*` | Cada página, `document_start`, ~48 KB |
-| `content/bNN.js` | Selectores propios de ~7.800 sitios, repartidos en 32 grupos | Solo en los sitios de su grupo (`matches`) |
-| `rules/links.json` | Reglas `redirect` que quitan parámetros de rastreo | Las aplica Chrome en cada navegación |
-| `content/consent.js` | Autoconsent con todas sus reglas (~550 KB) | Cada página (solo el frame principal), `document_start` |
-| `content/consent-frame.js` | Autoconsent con las reglas para iframes (~115 KB) | Cada iframe, `document_start` |
-| `background.js` | Registra los content scripts, la regla de lista blanca y el ruleset de enlaces; ejecuta los fragmentos de Autoconsent | Al instalar, al cambiar la configuración, al usar el popup o cuando lo pide una regla de cookies |
-| `popup.html` | Interruptor por sitio, contador e interruptores de enlaces y cookies | Al abrir el popup |
+| `rules/*.json` | Static `declarativeNetRequest` rules generated at build time | Applied by Chrome; the extension runs no code |
+| `content/generic.css` | EasyList generic selectors | Chrome injects the CSS into every frame (no JS) |
+| `content/always.js` | ~300 generic selectors with per-site exceptions and rules for `example.*` | Every page, `document_start`, ~48 KB |
+| `content/bNN.js` | Site-specific selectors for ~7,800 sites, split into 32 groups | Only on the sites in its group (`matches`) |
+| `rules/links.json` | `redirect` rules that strip tracking parameters | Applied by Chrome on every navigation |
+| `content/consent.js` | Autoconsent with all its rules (~550 KB) | Every page (top frame only), `document_start` |
+| `content/consent-frame.js` | Autoconsent with the iframe rules (~115 KB) | Every iframe, `document_start` |
+| `background.js` | Registers the content scripts, the allowlist rule and the links ruleset; runs Autoconsent snippets | On install, on settings changes, from the popup, or when a cookie rule asks |
+| `popup.html` | Per-site switch, counter, and switches for links and cookies | When the popup opens |
 
-- **Lista blanca:** una regla dinámica `allowAllRequests` (prioridad 1000) con los sitios permitidos,
-  más `excludeMatches` en los content scripts.
-- **Contador:** `displayActionCountAsBadgeText` de DNR. No hace falta `webRequest` ni el permiso
-  `declarativeNetRequestFeedback`.
-- **Sin `MutationObserver`:** las reglas CSS ya se aplican a los elementos que se añaden después.
+- **Allowlist:** one dynamic `allowAllRequests` rule (priority 1000) with the allowed sites, plus
+  `excludeMatches` on the content scripts.
+- **Counter:** DNR's `displayActionCountAsBadgeText`. No `webRequest` and no
+  `declarativeNetRequestFeedback` permission needed.
+- **No `MutationObserver`:** CSS rules already apply to elements added later.
 
-### Conversión de filtros (`src/convert/`)
+### Filter conversion (`src/convert/`)
 
-- `||dominio^` (con o sin opciones) se agrupa en reglas con `requestDomains`. Así ~85.000 filtros
-  de dominio caben en unas pocas reglas.
-- Las opciones `$third-party`/`$first-party`, `$domain=` (`initiatorDomains` y
-  `excludedInitiatorDomains`), los tipos de recurso, `$match-case`, `$important` y `$method=` se
-  traducen a las condiciones equivalentes de DNR.
-- `@@` se convierte en `allow`; `@@…$document`, en `allowAllRequests`; `@@||host^$elemhide` y
-  `$generichide`, en exclusiones cosméticas.
-- `$removeparam=nombre` se convierte en `redirect` con `queryTransform.removeParams`; los que
-  comparten condición se agrupan en una regla. Las formas con regex, negación o sin nombre se descartan.
-- **Se descartan** `$popup`, `$rewrite`, `$redirect`, `$csp`, `$sitekey`, regex que RE2 no
-  soporta (lookaround, referencias hacia atrás), entidades `ejemplo.*` en `$domain=` (exclusiones)
-  y filtros cosméticos extendidos (`#?#`, `:-abp-*`, `:has-text`, inyección de estilos `{…}`).
-  `generated/report.json` detalla cuántos y por qué.
-- **Regex:** `pnpm update-lists` abre Chrome sin interfaz y descarta las que
-  `isRegexSupported` rechaza. Chrome limita cada regex a 2 KB de memoria compilada, y
-  repeticiones como `.{100,}` lo superan. Si no encuentra Chrome (`CHROME_PATH`), avisa y
-  las deja todas.
-- **Límites de Chrome** (comprobados en la documentación de DNR, noviembre de 2026): 30.000 reglas
-  estáticas garantizadas por extensión y 1.000 regex. Si hubiera que recortar, se conservan primero
-  las excepciones, después las reglas de dominio, los patrones anclados a host, el resto de
-  patrones y, por último, las regex.
+- `||domain^` (with or without options) is grouped into rules with `requestDomains`, so ~85,000
+  domain filters fit in a few rules.
+- `$third-party`/`$first-party`, `$domain=` (`initiatorDomains` and `excludedInitiatorDomains`),
+  resource types, `$match-case`, `$important` and `$method=` map to the equivalent DNR conditions.
+- `@@` becomes `allow`; `@@…$document` becomes `allowAllRequests`; `@@||host^$elemhide` and
+  `$generichide` become cosmetic exclusions.
+- `$removeparam=name` becomes `redirect` with `queryTransform.removeParams`; those sharing a condition
+  are grouped into one rule. Regex, negated or nameless forms are dropped.
+- **Dropped:** `$popup`, `$rewrite`, `$redirect`, `$csp`, `$sitekey`, regexes RE2 can't handle
+  (lookaround, backreferences), `example.*` entities in `$domain=` (exclusions) and extended cosmetic
+  filters (`#?#`, `:-abp-*`, `:has-text`, style injection `{…}`). `generated/report.json` lists how
+  many and why.
+- **Regex:** `pnpm update-lists` opens headless Chrome and drops the ones `isRegexSupported` rejects.
+  Chrome caps each regex at 2 KB of compiled memory, and repetitions like `.{100,}` exceed it. If it
+  can't find Chrome (`CHROME_PATH`), it warns and keeps them all.
+- **Chrome limits** (checked against the DNR docs, November 2026): 30,000 guaranteed static rules per
+  extension and 1,000 regex rules. If trimming were needed, exceptions are kept first, then domain
+  rules, host-anchored patterns, other patterns and, last, regexes.
 
-## Desarrollo
+## Development
 
 ```bash
-pnpm test        # tests del conversor (node:test)
+pnpm test        # converter tests (node:test)
 pnpm typecheck
-pnpm verify      # Chrome real con perfil temporal: páginas con y sin extensión, popup, lista blanca
+pnpm verify      # real Chrome with a temporary profile: pages with and without the extension, popup, allowlist
 ```
 
-`pnpm verify` usa el Chrome instalado (`CHROME_PATH` para cambiarlo). Guarda capturas y un informe
-en `.cache/verify/`.
+`pnpm verify` uses the installed Chrome (`CHROME_PATH` to change it) and saves screenshots and a
+report in `.cache/verify/`.
 
-## Licencia y atribución
+## Chrome Web Store
 
-Código bajo GPLv3 o posterior (`LICENSE`). Las reglas derivan de EasyList, EasyPrivacy y la Adblock Warning Removal List
-(© The EasyList authors, GPLv3 / CC BY-SA 3.0), y el rechazo de cookies usa Autoconsent
-(© Duck Duck Go, Inc., MPL 2.0); ver `ATTRIBUTION.md`, que se incluye en `dist/`.
+The listing text, permission justifications, privacy answers and images are in [`store/`](store/);
+the step-by-step guide is [`store/PUBLISHING.md`](store/PUBLISHING.md) and the privacy policy is
+[`PRIVACY.md`](PRIVACY.md).
 
-La extensión **no está publicada** en la Chrome Web Store. Para publicarla, sigue
-[`store/PUBLICAR.md`](store/PUBLICAR.md); la ficha, los permisos justificados y las imágenes están
-en [`store/`](store/), y la política de privacidad en [`PRIVACY.md`](PRIVACY.md).
+## License and attribution
+
+Code under GPLv3 or later (`LICENSE`). The rules derive from EasyList, EasyPrivacy and the Adblock
+Warning Removal List (© The EasyList authors, GPLv3 / CC BY-SA 3.0), and cookie rejection uses
+Autoconsent (© Duck Duck Go, Inc., MPL 2.0); see `ATTRIBUTION.md`, which ships in `dist/`.

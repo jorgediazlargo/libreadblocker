@@ -138,6 +138,7 @@ await writeFile(join(DIST, 'manifest.json'), JSON.stringify(manifest, null, 2) +
 await cp(join(ROOT, 'static/popup.html'), join(DIST, 'popup.html'));
 await cp(join(ROOT, 'static/popup.css'), join(DIST, 'popup.css'));
 await cp(join(ROOT, 'static/icons'), join(DIST, 'icons'), { recursive: true });
+await cp(join(ROOT, 'static/_locales'), join(DIST, '_locales'), { recursive: true });
 await cp(join(ROOT, 'LICENSE'), join(DIST, 'LICENSE'));
 await cp(join(ROOT, 'ATTRIBUTION.md'), join(DIST, 'ATTRIBUTION.md'));
 

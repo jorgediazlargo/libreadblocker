@@ -1,58 +1,58 @@
-# Política de privacidad de Largo Ad Blocker
+# Largo Ad Blocker privacy policy
 
-_Última actualización: 13 de noviembre de 2026_
+_Last updated: November 13, 2026_
 
-Largo Ad Blocker es una extensión de Chrome que bloquea anuncios y rastreadores, quita los
-parámetros de rastreo de los enlaces y rechaza los avisos de cookies. Esta política explica qué
-datos trata.
+Largo Ad Blocker is a Chrome extension that blocks ads and trackers, strips tracking parameters from
+links and rejects cookie banners. This policy explains what data it handles.
 
-## Resumen
+## Summary
 
-**Largo Ad Blocker no recoge, guarda en servidores, vende ni comparte ningún dato personal.**
-No tiene telemetría, analítica, cuentas de usuario ni servidores propios, y no hace peticiones de
-red propias.
+**Largo Ad Blocker does not collect, store on servers, sell or share any personal data.** It has no
+telemetry, analytics, user accounts or servers of its own, and it makes no network requests of its
+own.
 
-## Qué datos trata y dónde
+## What data it handles, and where
 
-- **Las páginas que visitas.** Para bloquear anuncios, Chrome compara cada petición con las reglas
-  incluidas en la extensión (API `declarativeNetRequest`). Esa comparación la hace el propio
-  navegador en tu equipo; la extensión no ve ni guarda las URL que visitas.
-- **El contenido de las páginas.** Los scripts de contenido ocultan elementos publicitarios con
-  CSS y buscan el botón de "rechazar" de los avisos de cookies. Todo ocurre dentro de la página, en
-  tu equipo, y no se envía nada a ningún sitio.
-- **Tu configuración.** La lista de sitios en los que has desactivado el bloqueo y el estado de los
-  interruptores ("Quitar el rastreo de los enlaces" y "Rechazar los avisos de cookies") se guardan
-  con `chrome.storage.sync`. Si tienes activada la sincronización de Chrome, Google la sincroniza
-  entre tus equipos como el resto de datos de Chrome. El desarrollador no tiene acceso a ella.
-- **El contador de bloqueos.** El número que aparece en el icono lo calcula Chrome para cada
-  pestaña y desaparece al cerrarla.
+- **The pages you visit.** To block ads, Chrome checks each request against the rules bundled with
+  the extension (the `declarativeNetRequest` API). Chrome does that matching itself, on your device;
+  the extension does not see or store the URLs you visit.
+- **Page content.** Content scripts hide ad elements with CSS and look for the "reject" button on
+  cookie banners. All of this happens inside the page, on your device, and nothing is sent anywhere.
+- **Your settings.** The list of sites where you turned blocking off and the state of the two
+  switches ("Strip tracking from links" and "Reject cookie banners") are saved with
+  `chrome.storage.sync`. If Chrome sync is on, Google syncs them across your devices like the rest of
+  your Chrome data. The developer has no access to them.
+- **The block counter.** The number on the icon is computed by Chrome for each tab and disappears
+  when you close it.
 
-## Lo que no hace
+## What it doesn't do
 
-- No envía datos al desarrollador ni a terceros.
-- No usa cookies, identificadores ni huellas digitales.
-- No descarga ni ejecuta código remoto: las reglas y los scripts van dentro de la extensión y solo
-  cambian cuando se publica una versión nueva en la Chrome Web Store.
-- No muestra anuncios ni tiene una lista de anuncios "aceptables".
+- It doesn't send data to the developer or to third parties.
+- It doesn't use cookies, identifiers or fingerprinting.
+- It doesn't download or run remote code: the rules and scripts ship inside the extension and only
+  change when a new version is published on the Chrome Web Store.
+- It doesn't show ads and has no "acceptable ads" list.
 
-## Cambios
+## Changes
 
-Si alguna versión futura cambiara cómo se tratan los datos, se actualizará esta página y se avisará
-en la ficha de la Chrome Web Store antes de publicar esa versión.
+If a future version changes how data is handled, this page will be updated and the change announced
+on the Chrome Web Store listing before that version is published.
 
-## Contacto
+## Contact
 
-Para cualquier duda sobre esta política, escribe a la dirección de contacto que figura en la
-ficha de la extensión en la Chrome Web Store.
+For any question about this policy, open an issue at
+https://github.com/jorgediazlargo/libreadblocker/issues or use the contact address on the Chrome Web
+Store listing.
 
 ---
 
-# Privacy policy (English)
+# Política de privacidad (español)
 
-**Largo Ad Blocker does not collect, store on servers, sell or share any personal data.** It has no
-telemetry, analytics, accounts or servers, and makes no network requests of its own. Ad blocking is
-done by Chrome itself with the rules bundled in the extension (`declarativeNetRequest`); content
-scripts hide ad elements and click "reject" on cookie banners locally, inside the page. The only
-data stored is your settings (sites where blocking is off and the two module switches), kept in
-`chrome.storage.sync`, which Chrome syncs between your devices if you use Chrome sync; the developer
-has no access to it. No remote code is downloaded or executed.
+**Largo Ad Blocker no recoge, guarda en servidores, vende ni comparte ningún dato personal.** No
+tiene telemetría, analítica, cuentas ni servidores, y no hace peticiones de red propias. El bloqueo
+lo hace el propio Chrome con las reglas incluidas en la extensión (`declarativeNetRequest`); los
+scripts de contenido ocultan anuncios y pulsan "rechazar" en los avisos de cookies dentro de la
+página, en tu equipo. Lo único que se guarda es tu configuración (los sitios en los que has
+desactivado el bloqueo y los dos interruptores), en `chrome.storage.sync`, que Chrome sincroniza
+entre tus equipos si usas la sincronización; el desarrollador no tiene acceso a ella. No se descarga
+ni se ejecuta código remoto.

@@ -1,0 +1,14 @@
+{
+  "extDescription": { "message": "Bloquea anuncios y rastreadores con EasyList y EasyPrivacy. Sin telemetría ni peticiones propias." },
+  "siteOn": { "message": "Bloqueo activo en este sitio" },
+  "siteOff": { "message": "Bloqueo desactivado en este sitio" },
+  "unsupported": { "message": "Página no compatible" },
+  "blockedOne": { "message": "petición bloqueada en esta pestaña" },
+  "blockedMany": { "message": "peticiones bloqueadas en esta pestaña" },
+  "moduleLinks": { "message": "Quitar el rastreo de los enlaces" },
+  "moduleCookies": { "message": "Rechazar los avisos de cookies" },
+  "filtersFrom": { "message": "Filtros del $DATE$", "placeholders": { "date": { "content": "$1" } } },
+  "filters": { "message": "Filtros" },
+  "version": { "message": "Versión $V$", "placeholders": { "v": { "content": "$1" } } },
+  "licenses": { "message": "Licencias" }
+}
