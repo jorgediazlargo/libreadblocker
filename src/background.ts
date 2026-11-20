@@ -1,18 +1,21 @@
 // Service worker. No hace nada en segundo plano: Chrome lo despierta solo al instalar
 // o actualizar, cuando cambia la configuración (storage.sync, también desde otro equipo),
-// cuando el popup pide un cambio o cuando una regla de cookies necesita ejecutar un
-// fragmento en la página. El bloqueo lo hace Chrome con las reglas DNR.
+// cuando el popup pide un cambio, cuando una regla de cookies necesita ejecutar un
+// fragmento en la página o cuando se abre el modo lectura con el atajo o el menú contextual.
+// El bloqueo lo hace Chrome con las reglas DNR.
 
 import { evalSnippets } from '@duckduckgo/autoconsent';
 import { ALLOWLIST_KEY, isValidHost, setSiteEnabled } from './shared/allowlist.ts';
 import { applyConfig } from './shared/apply.ts';
 import { MODULES_KEY, isModuleName, setModule } from './shared/settings.ts';
+import { toggleReader } from './reader/toggle.ts';
 
 // La configuración solo es accesible desde las páginas de la extensión: los content scripts
 // (que viven en el proceso de la página) no pueden leerla ni escribirla.
 void chrome.storage.sync.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' });
 
 const EXTENSION_ORIGIN = new URL(chrome.runtime.getURL('')).origin;
+const READER_MENU = 'reader';
 
 let queue: Promise<unknown> = Promise.resolve();
 function enqueue(task: () => Promise<void>): Promise<unknown> {
@@ -23,7 +26,16 @@ function enqueue(task: () => Promise<void>): Promise<unknown> {
 chrome.runtime.onInstalled.addListener(() => {
   void chrome.declarativeNetRequest.setExtensionActionOptions({ displayActionCountAsBadgeText: true });
   void chrome.action.setBadgeBackgroundColor({ color: '#5b6470' });
+  chrome.contextMenus.create({ id: READER_MENU, title: chrome.i18n.getMessage('readerToggle'), contexts: ['page'], documentUrlPatterns: ['http://*/*', 'https://*/*'] }, () => void chrome.runtime.lastError);
   void enqueue(applyConfig);
+});
+
+// Modo lectura: atajo de teclado y clic derecho en la página. El popup lo abre por su cuenta.
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === READER_MENU) void toggleReader(tab?.id);
+});
+chrome.commands.onCommand.addListener((command, tab) => {
+  if (command === 'toggle-reader') void toggleReader(tab?.id);
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {

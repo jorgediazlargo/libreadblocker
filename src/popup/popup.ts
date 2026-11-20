@@ -1,5 +1,6 @@
 import { getAllowlist, matchingEntry, isValidHost } from '../shared/allowlist.ts';
 import { getModules, type ModuleName } from '../shared/settings.ts';
+import { toggleReader } from '../reader/toggle.ts';
 import meta from '../../generated/meta.json' with { type: 'json' };
 import allowIdsJson from '../../generated/allow-ids.json' with { type: 'json' };
 
@@ -59,6 +60,20 @@ async function modules() {
   }
 }
 
+/** Botón «Modo lectura»: muestra el atajo configurado y abre el lector en la pestaña actual. */
+function reader() {
+  const button = $<HTMLButtonElement>('reader');
+  void chrome.commands.getAll().then((all) => {
+    const key = all.find((c) => c.name === 'toggle-reader')?.shortcut;
+    if (key) button.textContent = t('readerShortcut', key);
+  });
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    if (await toggleReader((await currentTab())?.id)) window.close();
+    else button.disabled = false;
+  });
+}
+
 async function main() {
   // Las listas van dentro del paquete: su fecha es la de la última versión publicada.
   // Se muestra la más antigua y, al pasar el ratón, el detalle de cada lista.
@@ -71,6 +86,7 @@ async function main() {
     : version;
   lists.title = [t('version', chrome.runtime.getManifest().version), ...meta.lists.map((l) => `${l.name} ${l.version ?? ''}`.trim())].join('\n');
   void modules();
+  reader();
 
   const tab = await currentTab();
   const url = tab?.url ? new URL(tab.url) : null;

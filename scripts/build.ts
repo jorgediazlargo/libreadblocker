@@ -20,6 +20,7 @@ try {
 
 await rm(DIST, { recursive: true, force: true });
 await mkdir(join(DIST, 'content'), { recursive: true });
+await mkdir(join(DIST, 'reader'), { recursive: true });
 
 const common = {
   bundle: true,
@@ -31,6 +32,11 @@ const common = {
 
 await build({ ...common, entryPoints: [join(ROOT, 'src/background.ts')], outfile: join(DIST, 'background.js'), format: 'esm' });
 await build({ ...common, entryPoints: [join(ROOT, 'src/popup/popup.ts')], outfile: join(DIST, 'popup.js'), format: 'iife' });
+
+// Modo lectura: la copia del documento (content script) y el lector, que se inyecta al abrirlo.
+await build({ ...common, entryPoints: [join(ROOT, 'src/reader/snapshot.ts')], outfile: join(DIST, 'reader/snapshot.js'), format: 'iife' });
+await build({ ...common, entryPoints: [join(ROOT, 'src/reader/reader.ts')], outfile: join(DIST, 'reader/reader.js'), format: 'iife' });
+await cp(join(ROOT, 'src/reader/Readability-LICENSE.md'), join(DIST, 'reader/Readability-LICENSE.md'));
 
 // Un content script por grupo de selectores, cada uno con sus datos incrustados.
 const cosmeticDir = join(GEN, 'cosmetic');

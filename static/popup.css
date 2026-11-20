@@ -70,4 +70,19 @@ footer a { color: inherit; }
 footer a:hover { color: var(--fg); }
 .modules { padding: 12px 14px; display: grid; gap: 10px; border-top: 1px solid var(--line); }
 .modules .track { background: var(--muted); }
-body.na main .switch, body.na .count { display: none; }
+body.na main .switch, body.na .count, body.na .reader-button { display: none; }
+.reader-button {
+  display: block;
+  width: calc(100% - 28px);
+  margin: 0 14px 14px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.reader-button:hover { background: var(--line); }
+.reader-button:disabled { opacity: .5; cursor: default; }

@@ -16,7 +16,7 @@ const json = async (path: string) => JSON.parse(await readFile(join(ROOT, path),
 
 test('el manifest no pide más de lo necesario', async () => {
   const m = await json('static/manifest.json');
-  assert.deepEqual([...m.permissions].sort(), ['activeTab', 'declarativeNetRequest', 'scripting', 'storage']);
+  assert.deepEqual([...m.permissions].sort(), ['activeTab', 'contextMenus', 'declarativeNetRequest', 'scripting', 'storage']);
   assert.deepEqual(m.host_permissions, ['<all_urls>']);
   for (const key of ['web_accessible_resources', 'externally_connectable', 'optional_permissions', 'content_scripts', 'sandbox'])
     assert.equal(m[key], undefined, key);
@@ -80,7 +80,7 @@ test('el content script no lee de la cadena de prototipos', () => {
 /** Código propio que se instala (el conversor de src/convert solo corre al generar las reglas). */
 async function shippedSources(): Promise<Map<string, string>> {
   const out = new Map<string, string>();
-  for (const dir of ['src', 'src/content', 'src/popup', 'src/shared']) {
+  for (const dir of ['src', 'src/content', 'src/popup', 'src/reader', 'src/shared']) {
     for (const f of (await readdir(join(ROOT, dir))).filter((f) => f.endsWith('.ts'))) {
       out.set(`${dir}/${f}`, (await readFile(join(ROOT, dir, f), 'utf8')).replace(/\/\/.*$/gm, ''));
     }
@@ -105,8 +105,10 @@ test('la configuración solo se cambia desde las páginas de la extensión', asy
   const handlers = [...bg.matchAll(/if \(msg\?\.type === '(set-[a-z-]+)'([^)]*)\)/g)];
   assert.ok(handlers.length > 0);
   for (const [, type, rest] of handlers) assert.match(rest!, /&& fromExtensionPage/, `mensaje ${type}`);
-  // Los content scripts no tocan la configuración.
+  // Los content scripts no tocan la configuración. El lector solo guarda sus preferencias de
+  // lectura (tamaño y tema) en storage.local, nunca en storage.sync.
   for (const [f, code] of sources) if (f.startsWith('src/content/')) assert.doesNotMatch(code, /chrome\.storage/, f);
+  for (const [f, code] of sources) if (f.startsWith('src/reader/')) assert.doesNotMatch(code, /chrome\.storage\.sync/, f);
 });
 
 test('los avisos de cookies sin botón de rechazo no se ocultan', async () => {

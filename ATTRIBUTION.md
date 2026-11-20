@@ -28,3 +28,11 @@ https://github.com/duckduckgo/autoconsent — © Duck Duck Go, Inc.
 It is distributed under the Mozilla Public License 2.0 (https://www.mozilla.org/MPL/2.0/). The source
 code of the included version (the one pinned in `package.json`) is available at
 https://www.npmjs.com/package/@duckduckgo/autoconsent and in the repository above.
+
+## Readability
+
+Reader view (`reader/reader.js`) includes, unmodified, **Readability** 0.6.0 —
+https://github.com/mozilla/readability — © 2010 Arc90 Inc and Mozilla.
+
+It is distributed under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0); the
+license notice ships in `reader/Readability-LICENSE.md`.
