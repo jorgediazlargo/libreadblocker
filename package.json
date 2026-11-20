@@ -1,6 +1,6 @@
 {
   "name": "largo-ad-blocker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Bloqueador de anuncios y rastreadores para Chrome (MV3, declarativeNetRequest) basado en EasyList y EasyPrivacy",
   "license": "GPL-3.0-or-later",

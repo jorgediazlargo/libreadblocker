@@ -1,7 +1,8 @@
 // Aplica la configuración guardada (lista blanca + módulos):
 //  - una regla DNR dinámica allowAllRequests con los sitios permitidos;
 //  - el ruleset de limpieza de enlaces, activado o no;
-//  - los content scripts (cosmética y rechazo de cookies), con excludeMatches para esos sitios.
+//  - los content scripts (cosmética y rechazo de cookies), con excludeMatches para esos sitios;
+//  - la copia del documento que usa el modo lectura, en todos los sitios (no bloquea nada).
 
 import { hostPattern, isMatchableHost } from '../convert/buckets.ts';
 import { getAllowlist } from './allowlist.ts';
@@ -68,6 +69,7 @@ export async function applyConfig(): Promise<void> {
       matches: b.matches,
       excludeMatches: exclude,
     })),
+    { ...common, id: 'reader-snapshot', js: ['reader/snapshot.js'], matches: ['http://*/*', 'https://*/*'] },
   ];
   if (modules.cookies) {
     // Dos scripts: el de la página lleva todas las reglas; el de los iframes, solo las pocas

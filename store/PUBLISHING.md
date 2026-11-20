@@ -20,7 +20,7 @@ https://github.com/jorgediazlargo/libreadblocker/blob/main/PRIVACY.md
 
 ## 3. Create the item
 
-1. `pnpm package` in `~/dev/personal/libreadblocker` → `largo-ad-blocker-0.1.0.zip`.
+1. `pnpm package` in `~/dev/personal/libreadblocker` → `largo-ad-blocker-<version>.zip`.
 2. In the dashboard: **New item** → upload the zip.
 3. Fill in the tabs with the content of `store/LISTING.md`:
    - **Store listing:** English description, category, images from `images/en/`. Then switch the

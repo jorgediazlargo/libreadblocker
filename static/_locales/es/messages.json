@@ -1,5 +1,5 @@
 {
-  "extDescription": { "message": "Bloquea anuncios y rastreadores con EasyList y EasyPrivacy. Sin telemetría ni peticiones propias." },
+  "extDescription": { "message": "Bloquea anuncios y rastreadores con EasyList y EasyPrivacy, con modo lectura. Sin telemetría ni peticiones propias." },
   "siteOn": { "message": "Bloqueo activo en este sitio" },
   "siteOff": { "message": "Bloqueo desactivado en este sitio" },
   "unsupported": { "message": "Página no compatible" },
@@ -10,5 +10,13 @@
   "filtersFrom": { "message": "Filtros del $DATE$", "placeholders": { "date": { "content": "$1" } } },
   "filters": { "message": "Filtros" },
   "version": { "message": "Versión $V$", "placeholders": { "v": { "content": "$1" } } },
-  "licenses": { "message": "Licencias" }
+  "licenses": { "message": "Licencias" },
+  "readerToggle": { "message": "Modo lectura" },
+  "readerShortcut": { "message": "Modo lectura ($KEY$)", "placeholders": { "key": { "content": "$1" } } },
+  "readerClose": { "message": "Cerrar (Esc)" },
+  "readerSmaller": { "message": "Letra más pequeña" },
+  "readerLarger": { "message": "Letra más grande" },
+  "readerTheme": { "message": "Tema" },
+  "readerMinutes": { "message": "$N$ min de lectura", "placeholders": { "n": { "content": "$1" } } },
+  "readerNone": { "message": "No se ha encontrado ningún artículo en esta página" }
 }

@@ -1,9 +1,9 @@
 # Largo Ad Blocker privacy policy
 
-_Last updated: November 13, 2026_
+_Last updated: November 20, 2026_
 
 Largo Ad Blocker is a Chrome extension that blocks ads and trackers, strips tracking parameters from
-links and rejects cookie banners. This policy explains what data it handles.
+links, rejects cookie banners and has a reader view. This policy explains what data it handles.
 
 ## Summary
 
@@ -18,6 +18,11 @@ own.
   the extension does not see or store the URLs you visit.
 - **Page content.** Content scripts hide ad elements with CSS and look for the "reject" button on
   cookie banners. All of this happens inside the page, on your device, and nothing is sent anywhere.
+- **Reader view.** On each page, a content script keeps a copy of the page as it loaded, in the tab's
+  memory, so that reader view can show the article when you open it. The copy is not saved or sent
+  anywhere and disappears when you leave the page. Reader view only uses what the page already
+  loaded and makes no network requests. Your text size and theme for reader view are saved with
+  `chrome.storage.local`, on your device only.
 - **Your settings.** The list of sites where you turned blocking off and the state of the two
   switches ("Strip tracking from links" and "Reject cookie banners") are saved with
   `chrome.storage.sync`. If Chrome sync is on, Google syncs them across your devices like the rest of
@@ -52,7 +57,10 @@ Store listing.
 tiene telemetría, analítica, cuentas ni servidores, y no hace peticiones de red propias. El bloqueo
 lo hace el propio Chrome con las reglas incluidas en la extensión (`declarativeNetRequest`); los
 scripts de contenido ocultan anuncios y pulsan "rechazar" en los avisos de cookies dentro de la
-página, en tu equipo. Lo único que se guarda es tu configuración (los sitios en los que has
-desactivado el bloqueo y los dos interruptores), en `chrome.storage.sync`, que Chrome sincroniza
-entre tus equipos si usas la sincronización; el desarrollador no tiene acceso a ella. No se descarga
-ni se ejecuta código remoto.
+página, en tu equipo. El modo lectura guarda en la memoria de la pestaña una copia de la página tal y
+como se cargó, para poder mostrar el artículo cuando lo abras; esa copia no se guarda ni se envía a
+ningún sitio, y el modo lectura no hace peticiones. Lo único que se guarda es tu configuración: los
+sitios en los que has desactivado el bloqueo y los dos interruptores, en `chrome.storage.sync`, que
+Chrome sincroniza entre tus equipos si usas la sincronización, y el tamaño de letra y el tema del
+modo lectura, en `chrome.storage.local`, solo en tu equipo. El desarrollador no tiene acceso a ella.
+No se descarga ni se ejecuta código remoto.

@@ -1,5 +1,5 @@
 {
-  "extDescription": { "message": "Blocks ads and trackers with EasyList and EasyPrivacy. No telemetry, no requests of its own." },
+  "extDescription": { "message": "Blocks ads and trackers with EasyList and EasyPrivacy, plus a reader view. No telemetry, no requests of its own." },
   "siteOn": { "message": "Blocking on for this site" },
   "siteOff": { "message": "Blocking off for this site" },
   "unsupported": { "message": "Page not supported" },
@@ -10,5 +10,13 @@
   "filtersFrom": { "message": "Filters from $DATE$", "placeholders": { "date": { "content": "$1" } } },
   "filters": { "message": "Filters" },
   "version": { "message": "Version $V$", "placeholders": { "v": { "content": "$1" } } },
-  "licenses": { "message": "Licenses" }
+  "licenses": { "message": "Licenses" },
+  "readerToggle": { "message": "Reader view" },
+  "readerShortcut": { "message": "Reader view ($KEY$)", "placeholders": { "key": { "content": "$1" } } },
+  "readerClose": { "message": "Close (Esc)" },
+  "readerSmaller": { "message": "Smaller text" },
+  "readerLarger": { "message": "Larger text" },
+  "readerTheme": { "message": "Theme" },
+  "readerMinutes": { "message": "$N$ min read", "placeholders": { "n": { "content": "$1" } } },
+  "readerNone": { "message": "No article found on this page" }
 }
